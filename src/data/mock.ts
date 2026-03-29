@@ -1,14 +1,78 @@
 import { Player, TrainingSession, AttendanceRecord, Payment, Tournament, Team, Match, StandingRow } from "@/types";
 
 export const mockPlayers: Player[] = [
-  { id: "p1", name: "Ahmad Rizki", dateOfBirth: "2016-03-15", ageCategory: "U10", position: "ST", parentName: "Budi Rizki", parentPhone: "08123456789", ssbId: "ssb1" },
-  { id: "p2", name: "Dimas Pratama", dateOfBirth: "2016-07-22", ageCategory: "U10", position: "CM", parentName: "Andi Pratama", parentPhone: "08134567890", ssbId: "ssb1" },
-  { id: "p3", name: "Fajar Setiawan", dateOfBirth: "2014-01-10", ageCategory: "U12", position: "GK", parentName: "Rudi Setiawan", parentPhone: "08145678901", ssbId: "ssb1" },
-  { id: "p4", name: "Galih Permana", dateOfBirth: "2014-05-28", ageCategory: "U12", position: "CB", parentName: "Hendra Permana", parentPhone: "08156789012", ssbId: "ssb1" },
-  { id: "p5", name: "Irfan Hakim", dateOfBirth: "2012-11-03", ageCategory: "U14", position: "LW", parentName: "Joko Hakim", parentPhone: "08167890123", ssbId: "ssb1" },
-  { id: "p6", name: "Kresna Aditya", dateOfBirth: "2012-08-17", ageCategory: "U14", position: "RB", parentName: "Slamet Aditya", parentPhone: "08178901234", ssbId: "ssb1" },
-  { id: "p7", name: "Mahesa Putra", dateOfBirth: "2018-02-14", ageCategory: "U8", position: "ST", parentName: "Wawan Putra", parentPhone: "08189012345", ssbId: "ssb1" },
-  { id: "p8", name: "Naufal Aziz", dateOfBirth: "2018-06-30", ageCategory: "U8", position: "CM", parentName: "Yusuf Aziz", parentPhone: "08190123456", ssbId: "ssb1" },
+  {
+    id: "p1", name: "Ahmad Rizki", dateOfBirth: "2016-03-15", ageCategory: "U10", position: "ST",
+    parentName: "Budi Rizki", parentPhone: "08123456789", parentEmail: "budi.rizki@email.com",
+    address: "Jl. Merdeka No. 12, Jakarta Selatan", ssbId: "ssb1", status: "active",
+    documents: { photo: "/placeholder.svg" },
+    developmentNotes: [
+      { id: "dn1", date: "2026-03-20", type: "training", note: "Menunjukkan peningkatan kontrol bola. Perlu latihan finishing lebih.", author: "Coach Agus" },
+      { id: "dn2", date: "2026-03-15", type: "coach", note: "Pemain potensial untuk posisi striker. Semangat tinggi di setiap latihan.", author: "Coach Agus" },
+    ],
+  },
+  {
+    id: "p2", name: "Dimas Pratama", dateOfBirth: "2016-07-22", ageCategory: "U10", position: "CM",
+    parentName: "Andi Pratama", parentPhone: "08134567890", parentEmail: "andi.pratama@email.com",
+    address: "Jl. Sudirman No. 45, Jakarta Pusat", ssbId: "ssb1", status: "active",
+    documents: { birthCertificate: "/placeholder.svg", photo: "/placeholder.svg" },
+    developmentNotes: [
+      { id: "dn3", date: "2026-03-18", type: "training", note: "Passing akurat, perlu peningkatan stamina.", author: "Coach Agus" },
+    ],
+  },
+  {
+    id: "p3", name: "Fajar Setiawan", dateOfBirth: "2014-01-10", ageCategory: "U12", position: "GK",
+    parentName: "Rudi Setiawan", parentPhone: "08145678901", parentEmail: "rudi.setiawan@email.com",
+    address: "Jl. Gatot Subroto No. 78, Bandung", ssbId: "ssb1", status: "active",
+    documents: { birthCertificate: "/placeholder.svg", familyCard: "/placeholder.svg", photo: "/placeholder.svg" },
+    developmentNotes: [
+      { id: "dn4", date: "2026-03-22", type: "coach", note: "Refleks sangat baik. Siap untuk kompetisi U12.", author: "Coach Bimo" },
+      { id: "dn5", date: "2026-03-10", type: "training", note: "Latihan distribusi bola dari belakang. Sudah mulai berani keluar kotak.", author: "Coach Bimo" },
+    ],
+  },
+  {
+    id: "p4", name: "Galih Permana", dateOfBirth: "2014-05-28", ageCategory: "U12", position: "CB",
+    parentName: "Hendra Permana", parentPhone: "08156789012", parentEmail: "hendra.permana@email.com",
+    address: "Jl. Asia Afrika No. 23, Bandung", ssbId: "ssb1", status: "active",
+    documents: { photo: "/placeholder.svg" },
+    developmentNotes: [
+      { id: "dn6", date: "2026-03-19", type: "training", note: "Tackling bersih, positioning sudah membaik.", author: "Coach Bimo" },
+    ],
+  },
+  {
+    id: "p5", name: "Irfan Hakim", dateOfBirth: "2012-11-03", ageCategory: "U14", position: "LW",
+    parentName: "Joko Hakim", parentPhone: "08167890123", parentEmail: "joko.hakim@email.com",
+    address: "Jl. Diponegoro No. 56, Surabaya", ssbId: "ssb1", status: "active",
+    documents: { birthCertificate: "/placeholder.svg", photo: "/placeholder.svg" },
+    developmentNotes: [
+      { id: "dn7", date: "2026-03-25", type: "coach", note: "Speed luar biasa. Perlu perbaikan crossing.", author: "Coach Agus" },
+    ],
+  },
+  {
+    id: "p6", name: "Kresna Aditya", dateOfBirth: "2012-08-17", ageCategory: "U14", position: "RB",
+    parentName: "Slamet Aditya", parentPhone: "08178901234", parentEmail: "slamet.aditya@email.com",
+    address: "Jl. Pemuda No. 34, Surabaya", ssbId: "ssb1", status: "inactive",
+    documents: {},
+    developmentNotes: [
+      { id: "dn8", date: "2026-02-28", type: "coach", note: "Pemain disiplin. Saat ini istirahat karena cedera ringan.", author: "Coach Agus" },
+    ],
+  },
+  {
+    id: "p7", name: "Mahesa Putra", dateOfBirth: "2018-02-14", ageCategory: "U8", position: "ST",
+    parentName: "Wawan Putra", parentPhone: "08189012345", parentEmail: "wawan.putra@email.com",
+    address: "Jl. Veteran No. 89, Yogyakarta", ssbId: "ssb1", status: "active",
+    documents: { photo: "/placeholder.svg" },
+    developmentNotes: [
+      { id: "dn9", date: "2026-03-21", type: "training", note: "Mulai mengenal formasi. Antusias tinggi.", author: "Coach Citra" },
+    ],
+  },
+  {
+    id: "p8", name: "Naufal Aziz", dateOfBirth: "2018-06-30", ageCategory: "U8", position: "CM",
+    parentName: "Yusuf Aziz", parentPhone: "08190123456", parentEmail: "yusuf.aziz@email.com",
+    address: "Jl. Malioboro No. 67, Yogyakarta", ssbId: "ssb1", status: "active",
+    documents: { birthCertificate: "/placeholder.svg" },
+    developmentNotes: [],
+  },
 ];
 
 export const mockTrainingSessions: TrainingSession[] = [

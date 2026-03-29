@@ -4,6 +4,21 @@ export type TournamentFormat = "group" | "knockout" | "festival";
 export type PaymentStatus = "paid" | "unpaid";
 export type AttendanceStatus = "present" | "absent";
 export type CardType = "yellow" | "red";
+export type PlayerStatus = "active" | "inactive";
+
+export interface DevelopmentNote {
+  id: string;
+  date: string;
+  type: "training" | "coach";
+  note: string;
+  author: string;
+}
+
+export interface PlayerDocuments {
+  birthCertificate?: string;
+  familyCard?: string;
+  photo?: string;
+}
 
 export interface Player {
   id: string;
@@ -13,8 +28,13 @@ export interface Player {
   position: Position;
   parentName: string;
   parentPhone: string;
+  parentEmail: string;
+  address: string;
   ssbId: string;
   photoUrl?: string;
+  status: PlayerStatus;
+  documents: PlayerDocuments;
+  developmentNotes: DevelopmentNote[];
 }
 
 export interface TrainingSession {

@@ -12,6 +12,7 @@ import Register from "./pages/Register";
 import AppLayout from "./layouts/AppLayout";
 import SSBDashboard from "./pages/ssb/Dashboard";
 import Players from "./pages/ssb/Players";
+import PlayerDetail from "./pages/ssb/PlayerDetail";
 import Schedule from "./pages/ssb/Schedule";
 import Attendance from "./pages/ssb/Attendance";
 import Finance from "./pages/ssb/Finance";
@@ -41,6 +42,7 @@ const App = () => (
               <Route path="/ssb" element={<AppLayout />}>
                 <Route index element={<SSBDashboard />} />
                 <Route path="players" element={<Players />} />
+                <Route path="players/:id" element={<PlayerDetail />} />
                 <Route path="schedule" element={<Schedule />} />
                 <Route path="attendance" element={<Attendance />} />
                 <Route path="finance" element={<Finance />} />
