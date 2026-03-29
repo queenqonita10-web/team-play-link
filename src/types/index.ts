@@ -1,7 +1,8 @@
 export type AgeCategory = "U8" | "U10" | "U12" | "U14" | "U17";
 export type Position = "GK" | "CB" | "LB" | "RB" | "CM" | "LM" | "RM" | "CAM" | "LW" | "RW" | "ST";
 export type TournamentFormat = "group" | "knockout" | "festival";
-export type PaymentStatus = "paid" | "unpaid";
+export type PaymentStatus = "paid" | "unpaid" | "pending" | "overdue";
+export type PaymentType = "monthly" | "registration" | "event";
 export type AttendanceStatus = "present" | "absent";
 export type CardType = "yellow" | "red";
 export type PlayerStatus = "active" | "inactive";
