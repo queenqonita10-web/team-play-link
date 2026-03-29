@@ -3,17 +3,23 @@ import { en } from "./en";
 import { id } from "./id";
 
 type Language = "en" | "id";
-type Translations = typeof en;
+
+// Use a generic structure instead of literal types
+type TranslationStrings = {
+  [section: string]: {
+    [key: string]: string;
+  };
+};
 
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: Translations;
+  t: typeof en;
 }
 
 const LanguageContext = createContext<LanguageContextType | null>(null);
 
-const translations: Record<Language, Translations> = { en, id };
+const translations: Record<Language, TranslationStrings> = { en, id };
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>(() => {
@@ -26,8 +32,10 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("fg-lang", lang);
   }, []);
 
+  const t = translations[language] as typeof en;
+
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t: translations[language] }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t }}>
       {children}
     </LanguageContext.Provider>
   );
