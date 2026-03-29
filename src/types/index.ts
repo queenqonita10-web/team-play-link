@@ -1,5 +1,26 @@
-export type AgeCategory = "U8" | "U10" | "U12" | "U15" | "U18" | "Senior";
-export type Position = "GK" | "CB" | "LB" | "RB" | "CM" | "LM" | "RM" | "CAM" | "LW" | "RW" | "ST";
+export type UserRole = "super_admin" | "eo_admin" | "eo_operator" | "ssb_admin" | "coach" | "parent" | "scout";
+export type OrganizationType = "ssb" | "eo" | "scouting_agency";
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  orgId?: string;
+  photoUrl?: string;
+}
+
+export interface Organization {
+  id: string;
+  name: string;
+  type: OrganizationType;
+  tenantId: string;
+  address: string;
+  logoUrl?: string;
+}
+
+export type AgeCategory = "U9" | "U11" | "U13" | "U15" | "U17" | "U20" | "Senior";
+export type Position = "goalkeeper" | "defender" | "midfielder" | "forward";
 export type CompetitionType = "league" | "tournament";
 export type TournamentFormat = "group" | "knockout" | "hybrid";
 export type MatchStatus = "scheduled" | "live" | "completed" | "cancelled" | "postponed";
@@ -24,10 +45,37 @@ export interface DevelopmentNote {
 }
 
 export interface PlayerDocuments {
-  birthCertificate?: string;
-  familyCard?: string;
-  photo?: string;
-  identityCard?: string; // NIK/Passport Scan
+  birthCertificate?: string; // File Path
+  familyCard?: string;      // File Path
+  photo?: string;           // File Path
+  identityCard?: string;    // NIK/Passport Scan
+  
+  // Metadata for files
+  files?: {
+    id: string;
+    type: "birth_certificate" | "family_card" | "photo" | "identity_card";
+    fileName: string;
+    fileType: string;
+    fileSize: number;
+    uploadedAt: string;
+  }[];
+}
+
+export interface ParentData {
+  motherName: string;
+  contactNumber: string;
+  relationshipType: string;
+  email?: string;
+}
+
+export interface PlayerStatusLog {
+  id: string;
+  playerId: string;
+  oldStatus: PlayerStatus;
+  newStatus: PlayerStatus;
+  changedBy: string;
+  changedAt: string;
+  reason?: string;
 }
 
 export interface CompetitionHistory {
@@ -56,26 +104,30 @@ export interface Player {
   name: string;
   nik: string; // Encrypted in backend
   dateOfBirth: string;
+  age: number; // Calculated
   email: string;
   phone: string;
   ageCategory: AgeCategory;
   position: Position;
-  parentName: string;
-  motherName: string;
-  parentPhone: string;
-  parentEmail: string;
+  
+  parent: ParentData;
+  
   address: string;
   ssbId: string; // Current SSB
   photoUrl?: string;
   status: PlayerStatus;
   verificationStatus: VerificationStatus;
   documents: PlayerDocuments;
+  
+  statusLogs?: PlayerStatusLog[];
+  
   competitionHistory: CompetitionHistory[];
   developmentNotes: DevelopmentNote[];
   skillRatings?: SkillRating[];
   evaluations?: CoachEvaluation[];
   createdAt: string;
   updatedAt: string;
+  deletedAt?: string; // Soft Delete
 }
 
 export interface SkillRating {

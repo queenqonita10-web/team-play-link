@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
-
-export type UserRole = "admin_ssb" | "coach" | "parent" | "admin_eo";
+import { UserRole } from "@/types";
 
 interface User {
   id: string;

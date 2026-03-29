@@ -1,71 +1,52 @@
-# User Flow Diagrams: Football Grassroots Ecosystem Platform
+# Football Grassroots Ecosystem Platform - User Flow (BPMN 2.0 Simplified)
 
-## 1. SSB Admin & Coach Flow
-```mermaid
-graph TD
-    A[SSB Admin Login] --> B[Dashboard SSB]
-    B --> C[Manage Players]
-    B --> D[Manage Training Schedule]
-    B --> E[Manage Billing]
-    
-    D --> F[Create Session]
-    F --> G[Assign Coach]
-    G --> H[Generate QR Attendance]
-    
-    I[Coach Login] --> J[Scanner QR]
-    J --> K[Mark Presence]
-    I --> L[Input Skill Rating]
-    L --> M[Generate Progress Report]
-```
-
-## 2. Parent Portal Flow
-```mermaid
-graph TD
-    A[Parent Login] --> B[Select Child/Player]
-    B --> C[View Schedule]
-    B --> D[View Progress Report]
-    B --> E[Payment Status]
-    
-    C --> F[Training & Match Reminders]
-    D --> G[Download PDF Report]
-    E --> H[Pay Invoice via Midtrans/Xendit]
-```
-
-## 3. EO Admin & Tournament Flow
-```mermaid
-graph TD
-    A[EO Admin Login] --> B[Create Tournament]
-    B --> C[Set Age Categories]
-    B --> D[Open Registration]
-    
-    E[SSB Admin] --> F[Register Team to Tournament]
-    F --> G[Select Players from SSB DB]
-    G --> H[Automated Age Validation]
-    
-    D --> I[Verification Team]
-    I --> J[Generate Match Schedule]
-    J --> K[Match Operator Input Results]
-    K --> L[Automated Standing Update]
-```
-
-## 4. Single Player Identity Integration
+## 1. SSB Admin: Player Onboarding & Billing
 ```mermaid
 sequenceDiagram
-    participant P as Player (NIK)
-    participant S as SSB System
-    participant I as Integration Layer
-    participant E as EO System
-    
-    P->>S: Enrolls in SSB
-    S->>I: Check Global ID by NIK
-    I-->>S: Return Global ID / Create New
-    S->>S: Track Development (Training)
-    
-    S->>E: Register Team for Tournament
-    E->>I: Validate Squad (Global IDs)
-    I-->>E: Age & Identity Validated
-    E->>E: Record Match Stats
-    E->>I: Sync Match Stats to Global ID
-    
-    P->>I: View Combined Career Stats (Training + Matches)
+    participant Admin as SSB Admin
+    participant System as Platform
+    participant Parent as Parent
+    participant PG as Payment Gateway
+
+    Admin->>System: Input Data Pemain (Registrasi)
+    System->>System: Generate Global ID (Single Identity)
+    System->>Admin: Player Registered
+    System->>System: Otomatis Generate Invoice Bulanan
+    System->>Parent: Notifikasi Invoice (WhatsApp/Email)
+    Parent->>System: Bayar via Portal (Midtrans/Xendit)
+    System->>PG: Process Payment
+    PG-->>System: Success Callback
+    System->>Admin: Update Status Keuangan (Real-time)
 ```
+
+## 2. Coach: Training & Development Tracking
+```mermaid
+graph TD
+    A[Coach Dashboard] --> B[Buat Jadwal Latihan]
+    B --> C[Notifikasi ke Orang Tua]
+    C --> D[Scan QR Presensi di Lapangan]
+    D --> E{Geo-tag Valid?}
+    E -- Yes --> F[Update Attendance Rate]
+    E -- No --> G[Warning: Diluar Lokasi]
+    F --> H[Input Skill Rating/KPI]
+    H --> I[Visualisasi Grafik Progress]
+    I --> J[Parent Dashboard Update]
+```
+
+## 3. EO Admin & Operator: Competition Workflow
+```mermaid
+stateDiagram-v2
+    [*] --> Draft: Buat Kompetisi
+    Draft --> Registration: Buka Pendaftaran
+    Registration --> Verification: Validasi Umur & Dokumen
+    Verification --> Scheduling: Generate Match Schedule
+    Scheduling --> Live: Kompetisi Dimulai
+    Live --> InputScore: Operator Input Statistik
+    InputScore --> Standings: Update Klasemen Otomatis
+    Standings --> Live
+    Live --> Finished: Kompetisi Selesai
+```
+
+## 4. Parent: Monitoring & Payment
+- **Happy Path**: Lihat Jadwal -> Cek Progress Skill -> Bayar Iuran -> Terima Notifikasi Hasil Pertandingan.
+- **Exception Handling**: Pembayaran Gagal -> Notifikasi Retry -> Hubungi Admin via WhatsApp Integrated.

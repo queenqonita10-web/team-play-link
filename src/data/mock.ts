@@ -1,4 +1,24 @@
-import { Player, TrainingSession, AttendanceRecord, Payment, Invoice, StandingRow, Trainer, TrainingSchedule, TrainerAssignment, ParticipantGroup, NotificationLog, SkillRating, CoachEvaluation, Competition, CompetitionCategory, TournamentTeam, TournamentMatch } from "@/types";
+import { 
+  Player, 
+  TrainingSession, 
+  AttendanceRecord, 
+  Payment, 
+  Invoice, 
+  StandingRow, 
+  Trainer, 
+  TrainingSchedule, 
+  TrainerAssignment, 
+  ParticipantGroup, 
+  NotificationLog, 
+  SkillRating, 
+  CoachEvaluation, 
+  Competition, 
+  CompetitionCategory, 
+  TournamentTeam, 
+  TournamentMatch,
+  CompetitionRegistration,
+  CompetitionInvoice
+} from "@/types";
 
 export const mockSkillRatings: SkillRating[] = [
   {
@@ -45,44 +65,52 @@ export const mockCoachEvaluations: CoachEvaluation[] = [
 
 export const mockPlayers: Player[] = [
   {
-    id: "p1", globalId: "P-2026-0001", name: "Ahmad Rizki", nik: "3201010503160001", dateOfBirth: "2016-03-15", ageCategory: "U10", position: "ST",
-    parentName: "Budi Rizki", motherName: "Siti Aminah", parentPhone: "08123456789", parentEmail: "budi.rizki@email.com",
-    address: "Jl. Merdeka No. 12, Jakarta Selatan", ssbId: "ssb1", status: "active",
+    id: "p1", globalId: "P-2026-0001", name: "Ahmad Rizki", nik: "3201010503160001", dateOfBirth: "2016-03-15", age: 9, ageCategory: "U11", position: "forward",
+    email: "ahmad@email.com", phone: "08123456789",
+    parent: { motherName: "Siti Aminah", contactNumber: "08123456789", relationshipType: "Mother", email: "budi.rizki@email.com" },
+    address: "Jl. Merdeka No. 12, Jakarta Selatan", ssbId: "ssb1", status: "active", verificationStatus: "verified",
     documents: { photo: "/placeholder.svg" },
     developmentNotes: [
       { id: "dn1", date: "2026-03-20", type: "training", note: "Menunjukkan peningkatan kontrol bola. Perlu latihan finishing lebih.", author: "Coach Agus" },
       { id: "dn2", date: "2026-03-15", type: "coach", note: "Pemain potensial untuk posisi striker. Semangat tinggi di setiap latihan.", author: "Coach Agus" },
     ],
     skillRatings: mockSkillRatings.filter(sr => sr.playerId === "p1"),
-    evaluations: mockCoachEvaluations.filter(ce => ce.playerId === "p1")
+    evaluations: mockCoachEvaluations.filter(ce => ce.playerId === "p1"),
+    createdAt: "2026-01-01T00:00:00Z", updatedAt: "2026-03-20T00:00:00Z"
   },
   {
-    id: "p2", globalId: "P-2026-0002", name: "Dimas Pratama", nik: "3201012207160002", dateOfBirth: "2016-07-22", ageCategory: "U10", position: "CM",
-    parentName: "Andi Pratama", motherName: "Rina Wati", parentPhone: "08134567890", parentEmail: "andi.pratama@email.com",
-    address: "Jl. Sudirman No. 45, Jakarta Pusat", ssbId: "ssb1", status: "active",
+    id: "p2", globalId: "P-2026-0002", name: "Dimas Pratama", nik: "3201012207160002", dateOfBirth: "2016-07-22", age: 9, ageCategory: "U11", position: "midfielder",
+    email: "dimas@email.com", phone: "08134567890",
+    parent: { motherName: "Rina Wati", contactNumber: "08134567890", relationshipType: "Mother", email: "andi.pratama@email.com" },
+    address: "Jl. Sudirman No. 45, Jakarta Pusat", ssbId: "ssb1", status: "active", verificationStatus: "verified",
     documents: { birthCertificate: "/placeholder.svg", photo: "/placeholder.svg" },
     developmentNotes: [
       { id: "dn3", date: "2026-03-18", type: "training", note: "Passing akurat, perlu peningkatan stamina.", author: "Coach Agus" },
     ],
+    createdAt: "2026-01-05T00:00:00Z", updatedAt: "2026-03-18T00:00:00Z"
   },
   {
-    id: "p3", globalId: "P-2026-0003", name: "Fajar Setiawan", nik: "3204011001140003", dateOfBirth: "2014-01-10", ageCategory: "U12", position: "GK",
-    parentName: "Rudi Setiawan", motherName: "Dewi Lestari", parentPhone: "08145678901", parentEmail: "rudi.setiawan@email.com",
-    address: "Jl. Gatot Subroto No. 78, Bandung", ssbId: "ssb1", status: "active",
+    id: "p3", globalId: "P-2026-0003", name: "Fajar Setiawan", nik: "3204011001140003", dateOfBirth: "2014-01-10", age: 12, ageCategory: "U13", position: "goalkeeper",
+    email: "fajar@email.com", phone: "08145678901",
+    parent: { motherName: "Dewi Lestari", contactNumber: "08145678901", relationshipType: "Mother", email: "rudi.setiawan@email.com" },
+    address: "Jl. Gatot Subroto No. 78, Bandung", ssbId: "ssb1", status: "active", verificationStatus: "pending",
     documents: { birthCertificate: "/placeholder.svg", familyCard: "/placeholder.svg", photo: "/placeholder.svg" },
     developmentNotes: [
       { id: "dn4", date: "2026-03-22", type: "coach", note: "Refleks sangat baik. Siap untuk kompetisi U12.", author: "Coach Bimo" },
       { id: "dn5", date: "2026-03-10", type: "training", note: "Latihan distribusi bola dari belakang. Sudah mulai berani keluar kotak.", author: "Coach Bimo" },
     ],
+    createdAt: "2026-01-10T00:00:00Z", updatedAt: "2026-03-22T00:00:00Z"
   },
   {
-    id: "p4", globalId: "P-2026-0004", name: "Galih Permana", nik: "3204012805140004", dateOfBirth: "2014-05-28", ageCategory: "U12", position: "CB",
-    parentName: "Hendra Permana", motherName: "Nurul Hidayah", parentPhone: "08156789012", parentEmail: "hendra.permana@email.com",
-    address: "Jl. Asia Afrika No. 23, Bandung", ssbId: "ssb1", status: "active",
+    id: "p4", globalId: "P-2026-0004", name: "Galih Permana", nik: "3204012805140004", dateOfBirth: "2014-05-28", age: 11, ageCategory: "U13", position: "defender",
+    email: "galih@email.com", phone: "08156789012",
+    parent: { motherName: "Nurul Hidayah", contactNumber: "08156789012", relationshipType: "Mother", email: "hendra.permana@email.com" },
+    address: "Jl. Asia Afrika No. 23, Bandung", ssbId: "ssb1", status: "active", verificationStatus: "verified",
     documents: { photo: "/placeholder.svg" },
     developmentNotes: [
       { id: "dn6", date: "2026-03-19", type: "training", note: "Tackling bersih, positioning sudah membaik.", author: "Coach Bimo" },
     ],
+    createdAt: "2026-01-15T00:00:00Z", updatedAt: "2026-03-19T00:00:00Z"
   },
   {
     id: "p5", globalId: "P-2026-0005", name: "Irfan Hakim", nik: "3578010311120005", dateOfBirth: "2012-11-03", ageCategory: "U15", position: "LW",
@@ -255,9 +283,85 @@ export const mockCompetitions: Competition[] = [
 ];
 
 export const mockCompetitionCategories: CompetitionCategory[] = [
-  { id: "cat1", competitionId: "comp1", ageCategory: "U10", maxTeams: 16 },
-  { id: "cat2", competitionId: "comp1", ageCategory: "U12", maxTeams: 16 },
-  { id: "cat3", competitionId: "comp2", ageCategory: "U15", maxTeams: 24 },
+  { id: "cat1", competitionId: "comp1", ageCategory: "U10", maxTeams: 16, registrationFee: 500000, lateFee: 50000 },
+  { id: "cat2", competitionId: "comp1", ageCategory: "U12", maxTeams: 16, registrationFee: 500000, lateFee: 50000 },
+  { id: "cat3", competitionId: "comp2", ageCategory: "U15", maxTeams: 24, registrationFee: 750000, lateFee: 75000 },
+];
+
+export const mockRegistrations: CompetitionRegistration[] = [
+  {
+    id: "reg1",
+    competitionId: "comp1",
+    categoryId: "cat1",
+    ssbId: "ssb1",
+    teamName: "Garuda Muda U10",
+    status: "confirmed",
+    registeredAt: "2026-03-05T10:00:00Z",
+    paymentStatus: "paid",
+    invoiceId: "inv-reg1"
+  },
+  {
+    id: "reg2",
+    competitionId: "comp1",
+    categoryId: "cat1",
+    ssbId: "ssb2",
+    teamName: "Elang Biru U10",
+    status: "pending",
+    registeredAt: "2026-03-06T11:00:00Z",
+    paymentStatus: "pending",
+    invoiceId: "inv-reg2"
+  },
+  {
+    id: "reg3",
+    competitionId: "comp1",
+    categoryId: "cat2",
+    ssbId: "ssb1",
+    teamName: "Garuda Muda U12",
+    status: "pending",
+    registeredAt: "2026-03-07T09:00:00Z",
+    paymentStatus: "overdue",
+    invoiceId: "inv-reg3"
+  }
+];
+
+export const mockCompetitionInvoices: CompetitionInvoice[] = [
+  {
+    id: "inv-reg1",
+    registrationId: "reg1",
+    invoiceNumber: "INV-COMP1-001",
+    amount: 500000,
+    lateFee: 0,
+    discount: 0,
+    totalAmount: 500000,
+    dueDate: "2026-03-08T10:00:00Z",
+    status: "paid",
+    createdAt: "2026-03-05T10:00:00Z",
+    paidAt: "2026-03-07T15:00:00Z"
+  },
+  {
+    id: "inv-reg2",
+    registrationId: "reg2",
+    invoiceNumber: "INV-COMP1-002",
+    amount: 500000,
+    lateFee: 0,
+    discount: 0,
+    totalAmount: 500000,
+    dueDate: "2026-03-09T11:00:00Z",
+    status: "pending",
+    createdAt: "2026-03-06T11:00:00Z"
+  },
+  {
+    id: "inv-reg3",
+    registrationId: "reg3",
+    invoiceNumber: "INV-COMP1-003",
+    amount: 500000,
+    lateFee: 0,
+    discount: 0,
+    totalAmount: 500000,
+    dueDate: "2026-03-10T09:00:00Z",
+    status: "unpaid",
+    createdAt: "2026-03-07T09:00:00Z"
+  }
 ];
 
 export const mockTournamentTeams: TournamentTeam[] = [

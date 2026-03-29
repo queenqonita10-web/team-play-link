@@ -1,5 +1,5 @@
 import * as React from "react";
-import { QrCode, Camera, X, CheckCircle2, AlertCircle, RefreshCw } from "lucide-react";
+import { QrCode, Camera, X, CheckCircle2, AlertCircle, RefreshCw, MapPin, Navigation } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
@@ -9,36 +9,65 @@ import { mockPlayers, mockTrainingSchedules } from "@/data/mock";
 
 interface AttendanceScannerProps {
   sessionId: string;
-  onScanSuccess: (playerId: string) => void;
+  onScanSuccess: (playerId: string, location?: { lat: number; lng: number }) => void;
 }
 
 export function AttendanceScanner({ sessionId, onScanSuccess }: AttendanceScannerProps) {
   const { toast } = useToast();
   const [isScanning, setIsScanning] = React.useState(false);
-  const [scanResult, setScanResult] = React.useState<{ success: boolean; message: string; player?: string } | null>(null);
+  const [scanResult, setScanResult] = React.useState<{ success: boolean; message: string; player?: string; location?: { lat: number; lng: number } } | null>(null);
   const [progress, setProgress] = React.useState(0);
+  const [location, setLocation] = React.useState<{ lat: number; lng: number } | null>(null);
+  const [isVerifyingLocation, setIsVerifyingLocation] = React.useState(false);
 
   const session = mockTrainingSchedules.find(s => s.id === sessionId);
 
   const startScan = () => {
-    setIsScanning(true);
-    setScanResult(null);
-    setProgress(0);
+    setIsVerifyingLocation(true);
     
-    // Simulate scanning progress
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          handleScanComplete();
-          return 100;
+    // Simulate Geo-location tagging
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          setLocation(userLocation);
+          setIsVerifyingLocation(false);
+          setIsScanning(true);
+          setScanResult(null);
+          setProgress(0);
+          
+          // Simulate scanning progress
+          const interval = setInterval(() => {
+            setProgress((prev) => {
+              if (prev >= 100) {
+                clearInterval(interval);
+                handleScanComplete(userLocation);
+                return 100;
+              }
+              return prev + 10;
+            });
+          }, 200);
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+          setIsVerifyingLocation(false);
+          toast({
+            variant: "destructive",
+            title: "Location Access Required",
+            description: "Please enable location services for geo-location tagging.",
+          });
         }
-        return prev + 10;
-      });
-    }, 200);
+      );
+    } else {
+      setIsVerifyingLocation(false);
+      setIsScanning(true); // Fallback if no geo-location
+    }
   };
 
-  const handleScanComplete = () => {
+  const handleScanComplete = (loc?: { lat: number; lng: number }) => {
     // Simulate finding a random player from the session's age category
     const eligiblePlayers = mockPlayers.filter(p => p.ageCategory === session?.ageCategory);
     if (eligiblePlayers.length > 0) {
@@ -46,12 +75,13 @@ export function AttendanceScanner({ sessionId, onScanSuccess }: AttendanceScanne
       setScanResult({
         success: true,
         message: "QR Code Valid",
-        player: randomPlayer.name
+        player: randomPlayer.name,
+        location: loc
       });
-      onScanSuccess(randomPlayer.id);
+      onScanSuccess(randomPlayer.id, loc);
       toast({
         title: "Check-in Success",
-        description: `${randomPlayer.name} has been marked as present.`,
+        description: `${randomPlayer.name} has been marked as present. (Geo-tagged)`,
       });
     } else {
       setScanResult({
@@ -80,13 +110,24 @@ export function AttendanceScanner({ sessionId, onScanSuccess }: AttendanceScanne
         <div className="flex flex-col items-center justify-center space-y-6">
           {!isScanning && !scanResult && (
             <div className="w-full max-w-[300px] aspect-square border-2 border-dashed border-muted-foreground/30 rounded-2xl flex flex-col items-center justify-center bg-muted/20 transition-all hover:bg-muted/30">
-              <Camera className="h-12 w-12 text-muted-foreground/50 mb-4" />
-              <p className="text-sm text-muted-foreground text-center px-6">
-                Camera will activate when you start scanning
-              </p>
-              <Button onClick={startScan} className="mt-6">
-                Start Scanner
-              </Button>
+              {isVerifyingLocation ? (
+                <>
+                  <Navigation className="h-12 w-12 text-primary animate-pulse mb-4" />
+                  <p className="text-sm text-muted-foreground text-center px-6">
+                    Verifying GPS Location...
+                  </p>
+                </>
+              ) : (
+                <>
+                  <Camera className="h-12 w-12 text-muted-foreground/50 mb-4" />
+                  <p className="text-sm text-muted-foreground text-center px-6">
+                    Camera will activate when you start scanning
+                  </p>
+                  <Button onClick={startScan} className="mt-6">
+                    Start Scanner
+                  </Button>
+                </>
+              )}
             </div>
           )}
 

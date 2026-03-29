@@ -1,174 +1,397 @@
-import { useState } from "react";
-import { useLanguage } from "@/i18n/LanguageContext";
-import { calculateAge, getAgeCategory } from "@/lib/utils";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import * as React from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { 
+  Player, 
+  Position, 
+  AgeCategory, 
+  PlayerStatus,
+  VerificationStatus
+} from "@/types";
+import { 
+  Form, 
+  FormControl, 
+  FormField, 
+  FormItem, 
+  FormLabel, 
+  FormMessage,
+  FormDescription
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { z } from "zod";
-import type { Player, Position } from "@/types";
-
-const positions: Position[] = ["GK", "CB", "LB", "RB", "CM", "LM", "RM", "CAM", "LW", "RW", "ST"];
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from "@/components/ui/select";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { 
+  User, 
+  Users, 
+  FileUp, 
+  Save, 
+  X,
+  Calendar as CalendarIcon,
+  Phone,
+  Mail,
+  Shield,
+  MapPin
+} from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
+import { getAgeCategory, calculateAge } from "@/lib/player-utils";
 
 const playerSchema = z.object({
-  name: z.string().trim().min(2, "Minimal 2 karakter").max(100),
-  nik: z.string().regex(/^\d{16}$/, "NIK harus 16 digit angka"),
-  dateOfBirth: z.string().min(1, "Wajib diisi"),
-  position: z.enum(["GK", "CB", "LB", "RB", "CM", "LM", "RM", "CAM", "LW", "RW", "ST"]),
-  parentName: z.string().trim().min(2, "Minimal 2 karakter"),
-  motherName: z.string().trim().min(2, "Minimal 2 karakter"),
-  parentPhone: z.string().regex(/^\d*$/, "Hanya angka").optional().or(z.literal("")),
-  parentEmail: z.string().email("Email tidak valid").optional().or(z.literal("")),
-  address: z.string().max(500).optional().or(z.literal("")),
+  name: z.string().min(3, "Minimal 3 karakter").max(100, "Maksimal 100 karakter"),
+  nik: z.string().length(16, "NIK harus 16 digit").regex(/^\d+$/, "NIK harus angka"),
+  dateOfBirth: z.string().min(1, "Tanggal lahir wajib diisi"),
+  email: z.string().email("Format email tidak valid").optional().or(z.literal("")),
+  phone: z.string().min(10, "Nomor telepon tidak valid").optional().or(z.literal("")),
+  position: z.enum(["goalkeeper", "defender", "midfielder", "forward"]),
+  status: z.enum(["active", "inactive"]),
+  address: z.string().min(5, "Alamat terlalu pendek"),
+  parent: z.object({
+    motherName: z.string().min(3, "Nama ibu wajib diisi"),
+    contactNumber: z.string().min(10, "Nomor kontak tidak valid"),
+    relationshipType: z.string().default("Mother"),
+    email: z.string().email("Format email tidak valid").optional().or(z.literal("")),
+  }),
 });
 
-type FormErrors = Partial<Record<keyof z.infer<typeof playerSchema>, string>>;
-
 interface PlayerFormProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onSubmit: (player: Player) => void;
+  initialData?: Player | null;
+  onSubmit: (data: any) => void;
+  onCancel: () => void;
 }
 
-export function PlayerForm({ open, onOpenChange, onSubmit }: PlayerFormProps) {
-  const { t } = useLanguage();
-  const [name, setName] = useState("");
-  const [nik, setNik] = useState("");
-  const [dob, setDob] = useState("");
-  const [position, setPosition] = useState<Position>("ST");
-  const [parentName, setParentName] = useState("");
-  const [motherName, setMotherName] = useState("");
-  const [parentPhone, setParentPhone] = useState("");
-  const [parentEmail, setParentEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [errors, setErrors] = useState<FormErrors>({});
+export function PlayerForm({ initialData, onSubmit, onCancel }: PlayerFormProps) {
+  const { toast } = useToast();
+  const [activeTab, setActiveTab] = React.useState("personal");
+  
+  const form = useForm<z.infer<typeof playerSchema>>({
+    resolver: zodResolver(playerSchema),
+    defaultValues: initialData ? {
+      name: initialData.name,
+      nik: initialData.nik,
+      dateOfBirth: initialData.dateOfBirth,
+      email: initialData.email || "",
+      phone: initialData.phone || "",
+      position: initialData.position,
+      status: initialData.status,
+      address: initialData.address,
+      parent: {
+        motherName: initialData.parent.motherName,
+        contactNumber: initialData.parent.contactNumber,
+        relationshipType: initialData.parent.relationshipType,
+        email: initialData.parent.email || "",
+      },
+    } : {
+      name: "",
+      nik: "",
+      dateOfBirth: "",
+      email: "",
+      phone: "",
+      position: "midfielder",
+      status: "active",
+      address: "",
+      parent: {
+        motherName: "",
+        contactNumber: "",
+        relationshipType: "Mother",
+        email: "",
+      },
+    },
+  });
 
-  const age = dob ? calculateAge(dob) : null;
-  const category = dob ? getAgeCategory(dob) : null;
+  const dob = form.watch("dateOfBirth");
+  const age = dob ? calculateAge(dob) : 0;
+  const ageCat = dob ? getAgeCategory(dob) : "-";
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const result = playerSchema.safeParse({ name, nik, dateOfBirth: dob, position, parentName, motherName, parentPhone, parentEmail, address });
-
-    if (!result.success) {
-      const fieldErrors: FormErrors = {};
-      result.error.errors.forEach((err) => {
-        const field = err.path[0] as keyof FormErrors;
-        if (!fieldErrors[field]) fieldErrors[field] = err.message;
+  const handleFormSubmit = (values: z.infer<typeof playerSchema>) => {
+    // Check age constraints (6-25)
+    if (age < 6 || age > 25) {
+      toast({
+        variant: "destructive",
+        title: "Validasi Gagal",
+        description: "Umur pemain harus antara 6 hingga 25 tahun.",
       });
-      setErrors(fieldErrors);
       return;
     }
 
-    setErrors({});
-    const player: Player = {
-      id: `p-${Date.now()}`,
-      name: result.data.name,
-      nik: result.data.nik,
-      dateOfBirth: result.data.dateOfBirth,
-      ageCategory: category!,
-      position: result.data.position,
-      parentName: result.data.parentName,
-      motherName: result.data.motherName,
-      parentPhone: result.data.parentPhone || "",
-      parentEmail: result.data.parentEmail || "",
-      address: result.data.address || "",
-      ssbId: "ssb1",
-      status: "active",
-      documents: {},
-      developmentNotes: [],
+    const submissionData = {
+      ...values,
+      age,
+      ageCategory: ageCat,
+      updatedAt: new Date().toISOString(),
     };
 
-    onSubmit(player);
-    resetForm();
-  };
-
-  const resetForm = () => {
-    setName(""); setNik(""); setDob(""); setPosition("ST"); setParentName("");
-    setMotherName(""); setParentPhone(""); setParentEmail(""); setAddress("");
-    setErrors({});
+    onSubmit(submissionData);
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>{t.ssb.addPlayer}</DialogTitle>
-          <DialogDescription>{t.ssb.playerDetail}</DialogDescription>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label>{t.ssb.playerName} *</Label>
-            <Input value={name} onChange={(e) => setName(e.target.value)} />
-            {errors.name && <p className="text-xs text-destructive">{errors.name}</p>}
-          </div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="personal" className="gap-2">
+              <User className="h-4 w-4" /> Data Diri
+            </TabsTrigger>
+            <TabsTrigger value="parent" className="gap-2">
+              <Users className="h-4 w-4" /> Orang Tua
+            </TabsTrigger>
+            <TabsTrigger value="documents" className="gap-2">
+              <FileUp className="h-4 w-4" /> Dokumen
+            </TabsTrigger>
+          </TabsList>
 
-          <div className="space-y-2">
-            <Label>{t.ssb.nik} *</Label>
-            <Input value={nik} onChange={(e) => setNik(e.target.value)} maxLength={16} placeholder="16 digit" />
-            {errors.nik && <p className="text-xs text-destructive">{errors.nik}</p>}
-          </div>
+          <div className="mt-6">
+            <TabsContent value="personal" className="space-y-4">
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base font-bold">Informasi Pribadi</CardTitle>
+                </CardHeader>
+                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Nama Lengkap</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Contoh: Ahmad Rizki" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="nik"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>NIK (16 Digit)</FormLabel>
+                        <FormControl>
+                          <Input placeholder="3201..." maxLength={16} {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="dateOfBirth"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Tanggal Lahir</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input type="date" {...field} />
+                            <CalendarIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                          </div>
+                        </FormControl>
+                        <FormDescription>
+                          {dob && (
+                            <span className="text-xs font-medium text-primary">
+                              Umur: {age} Thn · Kategori: {ageCat}
+                            </span>
+                          )}
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="position"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Posisi Bermain</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Pilih posisi" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="goalkeeper">Goalkeeper</SelectItem>
+                            <SelectItem value="defender">Defender</SelectItem>
+                            <SelectItem value="midfielder">Midfielder</SelectItem>
+                            <SelectItem value="forward">Forward</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email Pemain (Opsional)</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input className="pl-9" placeholder="email@pemain.com" {...field} />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>No. Telepon (Opsional)</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input className="pl-9" placeholder="0812..." {...field} />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="status"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Status Keanggotaan</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Pilih status" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="active">Aktif</SelectItem>
+                            <SelectItem value="inactive">Nonaktif</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="address"
+                    render={({ field }) => (
+                      <FormItem className="md:col-span-2">
+                        <FormLabel>Alamat Lengkap</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                            <Input className="pl-9" placeholder="Jl. Raya No..." {...field} />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </CardContent>
+              </Card>
+            </TabsContent>
 
-          <div className="space-y-2">
-            <Label>{t.ssb.dateOfBirth} *</Label>
-            <Input type="date" value={dob} onChange={(e) => setDob(e.target.value)} />
-            {age !== null && category && (
-              <div className="flex gap-2">
-                <Badge variant="outline">{age} {t.ssb.years}</Badge>
-                <Badge variant="secondary">{category}</Badge>
-              </div>
-            )}
-            {errors.dateOfBirth && <p className="text-xs text-destructive">{errors.dateOfBirth}</p>}
-          </div>
+            <TabsContent value="parent" className="space-y-4">
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base font-bold">Data Orang Tua / Wali</CardTitle>
+                </CardHeader>
+                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="parent.motherName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Nama Ibu Kandung</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Nama lengkap ibu" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="parent.contactNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Nomor WA / Telepon</FormLabel>
+                        <FormControl>
+                          <Input placeholder="0812..." {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="parent.email"
+                    render={({ field }) => (
+                      <FormItem className="md:col-span-2">
+                        <FormLabel>Email Orang Tua</FormLabel>
+                        <FormControl>
+                          <Input placeholder="email@orangtua.com" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </CardContent>
+              </Card>
+            </TabsContent>
 
-          <div className="space-y-2">
-            <Label>{t.ssb.position}</Label>
-            <Select value={position} onValueChange={(v) => setPosition(v as Position)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                {positions.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
-              </SelectContent>
-            </Select>
+            <TabsContent value="documents" className="space-y-4">
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base font-bold">Upload Dokumen Pendukung</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="border-2 border-dashed rounded-xl p-6 flex flex-col items-center justify-center bg-muted/20 hover:bg-muted/30 transition-all cursor-pointer">
+                      <FileUp className="h-8 w-8 text-muted-foreground mb-2" />
+                      <span className="text-xs font-bold text-center">Akte Kelahiran (PDF/JPG)</span>
+                      <span className="text-[10px] text-muted-foreground mt-1">Max 5MB</span>
+                    </div>
+                    <div className="border-2 border-dashed rounded-xl p-6 flex flex-col items-center justify-center bg-muted/20 hover:bg-muted/30 transition-all cursor-pointer">
+                      <FileUp className="h-8 w-8 text-muted-foreground mb-2" />
+                      <span className="text-xs font-bold text-center">Kartu Keluarga (PDF/JPG)</span>
+                      <span className="text-[10px] text-muted-foreground mt-1">Max 5MB</span>
+                    </div>
+                    <div className="border-2 border-dashed rounded-xl p-6 flex flex-col items-center justify-center bg-muted/20 hover:bg-muted/30 transition-all cursor-pointer">
+                      <FileUp className="h-8 w-8 text-muted-foreground mb-2" />
+                      <span className="text-xs font-bold text-center">Foto Profil (JPG/PNG)</span>
+                      <span className="text-[10px] text-muted-foreground mt-1">Max 5MB</span>
+                    </div>
+                  </div>
+                  <div className="bg-blue-50 border border-blue-100 p-4 rounded-lg flex gap-3">
+                    <Shield className="h-5 w-5 text-blue-600 shrink-0" />
+                    <p className="text-xs text-blue-700 leading-relaxed">
+                      Seluruh dokumen yang diunggah akan disimpan dengan enkripsi dan hanya digunakan untuk keperluan verifikasi identitas pemain oleh pihak berwenang.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
           </div>
+        </Tabs>
 
-          <div className="space-y-2">
-            <Label>{t.ssb.parentName} *</Label>
-            <Input value={parentName} onChange={(e) => setParentName(e.target.value)} />
-            {errors.parentName && <p className="text-xs text-destructive">{errors.parentName}</p>}
-          </div>
-
-          <div className="space-y-2">
-            <Label>{t.ssb.motherName} *</Label>
-            <Input value={motherName} onChange={(e) => setMotherName(e.target.value)} />
-            {errors.motherName && <p className="text-xs text-destructive">{errors.motherName}</p>}
-          </div>
-
-          <div className="space-y-2">
-            <Label>{t.ssb.parentPhone}</Label>
-            <Input value={parentPhone} onChange={(e) => setParentPhone(e.target.value)} />
-            {errors.parentPhone && <p className="text-xs text-destructive">{errors.parentPhone}</p>}
-          </div>
-
-          <div className="space-y-2">
-            <Label>{t.ssb.parentEmail}</Label>
-            <Input type="email" value={parentEmail} onChange={(e) => setParentEmail(e.target.value)} />
-            {errors.parentEmail && <p className="text-xs text-destructive">{errors.parentEmail}</p>}
-          </div>
-
-          <div className="space-y-2">
-            <Label>{t.ssb.address}</Label>
-            <Textarea value={address} onChange={(e) => setAddress(e.target.value)} rows={2} />
-          </div>
-
-          <div className="flex gap-2 justify-end">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>{t.common.cancel}</Button>
-            <Button type="submit">{t.common.save}</Button>
-          </div>
-        </form>
-      </DialogContent>
-    </Dialog>
+        <div className="flex justify-end gap-3 pt-4 border-t">
+          <Button type="button" variant="outline" onClick={onCancel} className="gap-2">
+            <X className="h-4 w-4" /> Batal
+          </Button>
+          <Button type="submit" className="gap-2">
+            <Save className="h-4 w-4" /> {initialData ? "Simpan Perubahan" : "Daftarkan Pemain"}
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }

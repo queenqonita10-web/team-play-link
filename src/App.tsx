@@ -22,6 +22,7 @@ import Tournaments from "./pages/eo/Tournaments";
 import Teams from "./pages/eo/Teams";
 import Fixtures from "./pages/eo/Fixtures";
 import Standings from "./pages/eo/Standings";
+import Registrations from "./pages/eo/Registrations";
 import ParentDashboard from "./pages/parent/ParentDashboard";
 import NotFound from "./pages/NotFound";
 
@@ -56,6 +57,7 @@ const App = () => (
                 <Route path="teams" element={<Teams />} />
                 <Route path="fixtures" element={<Fixtures />} />
                 <Route path="standings" element={<Standings />} />
+                <Route path="registrations" element={<Registrations />} />
               </Route>
 
               <Route path="/parent" element={<AppLayout />}>
