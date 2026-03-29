@@ -16,6 +16,7 @@ import PlayerDetail from "./pages/ssb/PlayerDetail";
 import Schedule from "./pages/ssb/Schedule";
 import Attendance from "./pages/ssb/Attendance";
 import Finance from "./pages/ssb/Finance";
+import TeamRegistration from "./pages/ssb/TeamRegistration";
 import EODashboard from "./pages/eo/Dashboard";
 import Tournaments from "./pages/eo/Tournaments";
 import Teams from "./pages/eo/Teams";
@@ -33,7 +34,7 @@ const App = () => (
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <BrowserRouter>
+          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <Routes>
               <Route path="/" element={<Landing />} />
               <Route path="/login" element={<Login />} />
@@ -46,6 +47,7 @@ const App = () => (
                 <Route path="schedule" element={<Schedule />} />
                 <Route path="attendance" element={<Attendance />} />
                 <Route path="finance" element={<Finance />} />
+                <Route path="registration" element={<TeamRegistration />} />
               </Route>
 
               <Route path="/eo" element={<AppLayout />}>

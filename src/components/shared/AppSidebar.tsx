@@ -7,11 +7,12 @@ import {
   SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader, SidebarFooter, useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, Users, Calendar, ClipboardCheck, Wallet, Trophy, Shield, ListOrdered, LogOut } from "lucide-react";
+import { LayoutDashboard, Users, Calendar, ClipboardCheck, Wallet, Trophy, Shield, ListOrdered, LogOut, ShieldCheck } from "lucide-react";
 
 const ssbItems = (t: any) => [
   { title: t.ssb.dashboard, url: "/ssb", icon: LayoutDashboard },
   { title: t.ssb.players, url: "/ssb/players", icon: Users },
+  { title: "Registrasi Tim", url: "/ssb/registration", icon: ShieldCheck },
   { title: t.ssb.schedule, url: "/ssb/schedule", icon: Calendar },
   { title: t.ssb.attendance, url: "/ssb/attendance", icon: ClipboardCheck },
   { title: t.ssb.finance, url: "/ssb/finance", icon: Wallet },
@@ -25,6 +26,12 @@ const eoItems = (t: any) => [
   { title: t.eo.standings, url: "/eo/standings", icon: ListOrdered },
 ];
 
+const parentItems = (t: any) => [
+  { title: "Parent Dashboard", url: "/parent", icon: LayoutDashboard },
+  { title: "Schedule", url: "/ssb/schedule", icon: Calendar }, // Reusing SSB schedule
+  { title: "Finance", url: "/ssb/finance", icon: Wallet },     // Reusing SSB finance
+];
+
 export function AppSidebar() {
   const { t } = useLanguage();
   const { user, logout } = useAuth();
@@ -34,8 +41,19 @@ export function AppSidebar() {
   const collapsed = state === "collapsed";
 
   const isSSB = location.pathname.startsWith("/ssb");
-  const items = isSSB ? ssbItems(t) : eoItems(t);
-  const groupLabel = isSSB ? t.ssb.title : t.eo.title;
+  const isEO = location.pathname.startsWith("/eo");
+  const isParent = location.pathname.startsWith("/parent");
+
+  let items = ssbItems(t);
+  let groupLabel = t.ssb.title;
+
+  if (isEO) {
+    items = eoItems(t);
+    groupLabel = t.eo.title;
+  } else if (isParent) {
+    items = parentItems(t);
+    groupLabel = "Parent Portal";
+  }
 
   const handleLogout = () => {
     logout();

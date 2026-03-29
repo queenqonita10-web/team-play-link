@@ -9,7 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, FileText, Upload, User, Calendar, Phone, Mail, MapPin, CheckCircle, XCircle, MessageSquare } from "lucide-react";
+import { ArrowLeft, FileText, Upload, User, Calendar, Phone, Mail, MapPin, CheckCircle, XCircle, MessageSquare, TrendingUp } from "lucide-react";
+import { DevelopmentTracking } from "@/components/ssb/DevelopmentTracking";
 import type { DevelopmentNote, Player } from "@/types";
 
 export default function PlayerDetail() {
@@ -93,8 +94,13 @@ export default function PlayerDetail() {
         <TabsList className="w-full justify-start">
           <TabsTrigger value="profile">{t.ssb.profile}</TabsTrigger>
           <TabsTrigger value="documents">{t.ssb.documents}</TabsTrigger>
+          <TabsTrigger value="tracking" className="gap-2"><TrendingUp className="h-4 w-4" /> Tracking</TabsTrigger>
           <TabsTrigger value="development">{t.ssb.development}</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="tracking" className="mt-6">
+          <DevelopmentTracking player={player} />
+        </TabsContent>
 
         {/* Profile Tab */}
         <TabsContent value="profile">

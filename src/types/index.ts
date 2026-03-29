@@ -1,11 +1,19 @@
-export type AgeCategory = "U8" | "U10" | "U12" | "U14" | "U17";
+export type AgeCategory = "U8" | "U10" | "U12" | "U15" | "U18" | "Senior";
 export type Position = "GK" | "CB" | "LB" | "RB" | "CM" | "LM" | "RM" | "CAM" | "LW" | "RW" | "ST";
-export type TournamentFormat = "group" | "knockout" | "festival";
+export type CompetitionType = "league" | "tournament";
+export type TournamentFormat = "group" | "knockout" | "hybrid";
+export type MatchStatus = "scheduled" | "live" | "completed" | "cancelled" | "postponed";
+export type GoalType = "regular" | "penalty" | "own_goal";
+export type RegistrationStatus = "open" | "closed" | "upcoming";
 export type PaymentStatus = "paid" | "unpaid" | "pending" | "overdue";
 export type PaymentType = "monthly" | "registration" | "event";
-export type AttendanceStatus = "present" | "absent";
+export type AttendanceStatus = "present" | "permitted" | "absent";
+export type AttendanceMethod = "qr_code" | "manual";
 export type CardType = "yellow" | "red";
 export type PlayerStatus = "active" | "inactive";
+export type VerificationStatus = "unverified" | "pending" | "verified" | "rejected";
+export type ScheduleStatus = "scheduled" | "completed" | "cancelled";
+export type RecurrenceType = "none" | "daily" | "weekly" | "monthly";
 
 export interface DevelopmentNote {
   id: string;
@@ -19,13 +27,37 @@ export interface PlayerDocuments {
   birthCertificate?: string;
   familyCard?: string;
   photo?: string;
+  identityCard?: string; // NIK/Passport Scan
+}
+
+export interface CompetitionHistory {
+  id: string;
+  playerId: string;
+  competitionId: string;
+  competitionName: string;
+  categoryId: string;
+  teamId: string;
+  teamName: string;
+  participationDate: string;
+  achievement?: string;
+  pointsEarned?: number;
+  stats?: {
+    goals: number;
+    assists: number;
+    yellowCards: number;
+    redCards: number;
+    minutesPlayed: number;
+  };
 }
 
 export interface Player {
   id: string;
+  globalId: string; // Global Identity (UUID)
   name: string;
-  nik: string;
+  nik: string; // Encrypted in backend
   dateOfBirth: string;
+  email: string;
+  phone: string;
   ageCategory: AgeCategory;
   position: Position;
   parentName: string;
@@ -33,11 +65,136 @@ export interface Player {
   parentPhone: string;
   parentEmail: string;
   address: string;
-  ssbId: string;
+  ssbId: string; // Current SSB
   photoUrl?: string;
   status: PlayerStatus;
+  verificationStatus: VerificationStatus;
   documents: PlayerDocuments;
+  competitionHistory: CompetitionHistory[];
   developmentNotes: DevelopmentNote[];
+  skillRatings?: SkillRating[];
+  evaluations?: CoachEvaluation[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SkillRating {
+  id: string;
+  playerId: string;
+  date: string;
+  evaluatorId: string;
+  
+  // Teknik
+  passing: number;
+  shooting: number;
+  dribbling: number;
+  firstTouch: number;
+  
+  // Fisik
+  speed: number;
+  stamina: number;
+  strength: number;
+  agility: number;
+  
+  // Taktik
+  positioning: number;
+  vision: number;
+  decisionMaking: number;
+  teamwork: number;
+  
+  // Mental
+  leadership: number;
+  composure: number;
+  workEthic: number;
+  coachability: number;
+  
+  overallAverage: number;
+}
+
+export interface CoachEvaluation {
+  id: string;
+  playerId: string;
+  evaluatorId: string;
+  date: string;
+  period: "weekly" | "monthly" | "quarterly";
+  comments: {
+    technical: string;
+    physical: string;
+    tactical: string;
+    mental: string;
+  };
+  recommendations: string;
+  strengths: string[];
+  weaknesses: string[];
+  nextTargets: string[];
+}
+
+export interface ProgressMetric {
+  playerId: string;
+  periodStart: string;
+  periodEnd: string;
+  skillGrowth: {
+    category: string;
+    growth: number;
+  }[];
+  summary: string;
+}
+
+export interface Trainer {
+  id: string;
+  name: string;
+  specialization?: string;
+  phone?: string;
+  email?: string;
+  photoUrl?: string;
+}
+
+export interface TrainingSchedule {
+  id: string;
+  title: string;
+  description?: string;
+  startTime: string; // ISO String
+  endTime: string;   // ISO String
+  location: string;
+  maxParticipants: number;
+  status: ScheduleStatus;
+  ageCategory: AgeCategory;
+  groupId?: string;
+  recurrence?: {
+    type: RecurrenceType;
+    endDate?: string; // ISO String
+    exceptionDates?: string[]; // ISO Strings
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface TrainerAssignment {
+  id: string;
+  trainerId: string;
+  scheduleId: string;
+  role?: string; // e.g., "Main Coach", "Assistant"
+  assignedAt: string;
+}
+
+export interface ParticipantGroup {
+  id: string;
+  name: string;
+  ageCategory: AgeCategory;
+  minSkillLevel?: number; // 1-5
+  maxCapacity: number;
+  players: string[]; // Player IDs
+}
+
+export interface NotificationLog {
+  id: string;
+  scheduleId: string;
+  recipientId: string; // Parent/Player ID
+  channel: "email" | "whatsapp" | "push";
+  templateType: "reminder" | "change" | "cancellation";
+  status: "sent" | "failed" | "delivered" | "bounced";
+  sentAt: string;
+  errorMessage?: string;
 }
 
 export interface TrainingSession {
@@ -55,7 +212,12 @@ export interface AttendanceRecord {
   playerId: string;
   sessionId: string;
   date: string;
+  checkInTime?: string; // ISO String
   status: AttendanceStatus;
+  method: AttendanceMethod;
+  qrCode?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Payment {
@@ -81,41 +243,136 @@ export interface Invoice {
   paymentMethod?: "midtrans" | "xendit" | "manual";
 }
 
-export interface Tournament {
+export interface Competition {
   id: string;
+  eoId: string;
   name: string;
+  type: CompetitionType;
   format: TournamentFormat;
-  ageCategories: AgeCategory[];
   startDate: string;
   endDate: string;
-  venue: string;
-  status: "upcoming" | "ongoing" | "completed";
-  teamsCount: number;
+  registrationPeriod: {
+    start: string;
+    end: string;
+  };
+  status: "draft" | "upcoming" | "ongoing" | "completed";
+  description?: string;
+  prizeStructure?: string;
+  participantLimit?: number;
 }
 
-export interface Team {
+export interface CompetitionCategory {
   id: string;
-  name: string;
-  ssbName: string;
+  competitionId: string;
   ageCategory: AgeCategory;
-  tournamentId: string;
-  players: string[];
+  minAge?: number;
+  maxAge?: number;
+  maxTeams: number;
+  registrationFee: number;
+  lateFee?: number;
+  rules?: string;
 }
 
-export interface Match {
+export type PaymentMethod = "bank_transfer" | "virtual_account" | "ewallet" | "manual";
+
+export interface CompetitionRegistration {
   id: string;
-  tournamentId: string;
-  homeTeam: string;
-  awayTeam: string;
-  homeScore?: number;
-  awayScore?: number;
+  competitionId: string;
+  categoryId: string;
+  ssbId: string;
+  teamName: string;
+  status: "pending" | "confirmed" | "rejected" | "cancelled";
+  registeredAt: string;
+  paymentStatus: PaymentStatus;
+  invoiceId?: string;
+  notes?: string;
+}
+
+export interface CompetitionInvoice {
+  id: string;
+  registrationId: string;
+  invoiceNumber: string;
+  amount: number;
+  lateFee: number;
+  discount: number;
+  totalAmount: number;
+  dueDate: string;
+  status: PaymentStatus;
+  paymentUrl?: string; // For gateway integration
+  createdAt: string;
+  paidAt?: string;
+}
+
+export interface PaymentTransaction {
+  id: string;
+  invoiceId: string;
+  externalId: string; // ID from payment gateway
+  amount: number;
+  method: PaymentMethod;
+  status: "pending" | "success" | "failed";
+  paidAt?: string;
+  metadata?: any;
+}
+
+export interface MatchGoal {
+  id: string;
+  matchId: string;
+  teamId: string;
+  playerId: string;
+  minute: number;
+  type: GoalType;
+  assistPlayerId?: string;
+}
+
+export interface MatchCard {
+  id: string;
+  matchId: string;
+  teamId: string;
+  playerId: string;
+  minute: number;
+  type: CardType;
+  reason?: string;
+}
+
+export interface MatchStatistics {
+  matchId: string;
+  teamId: string;
+  possession: number; // Percentage
+  shotsOnTarget: number;
+  shotsOffTarget: number;
+  corners: number;
+  offsides: number;
+  fouls: number;
+  passAccuracy: number; // Percentage
+}
+
+export interface TournamentMatch {
+  id: string;
+  competitionId: string;
+  categoryId: string;
+  stage: string; // e.g., "Group A", "Quarter Final"
+  homeTeamId: string;
+  awayTeamId: string;
+  homeScore: number;
+  awayScore: number;
   date: string;
   time: string;
   venue: string;
-  stage: string;
-  status: "scheduled" | "live" | "completed";
-  scorers?: { playerId: string; playerName: string; team: string; minute: number }[];
-  cards?: { playerId: string; playerName: string; team: string; type: CardType; minute: number }[];
+  status: MatchStatus;
+  refereeId?: string;
+  goals: MatchGoal[];
+  cards: MatchCard[];
+  stats?: {
+    home: MatchStatistics;
+    away: MatchStatistics;
+  };
+  auditLog: {
+    action: string;
+    userId: string;
+    timestamp: string;
+    oldValue?: any;
+    newValue?: any;
+  }[];
 }
 
 export interface StandingRow {
@@ -129,4 +386,33 @@ export interface StandingRow {
   goalsAgainst: number;
   goalDifference: number;
   points: number;
+}
+
+export interface TournamentTeam {
+  id: string;
+  competitionId: string;
+  categoryId: string;
+  ssbId: string;
+  name: string;
+  logoUrl?: string;
+  status: "pending" | "approved" | "rejected";
+  registeredAt: string;
+  players: string[]; // Player Global IDs
+  submittedAt?: string;
+  officialId: string; // User ID of the submitter
+}
+
+export interface RegistrationLog {
+  id: string;
+  teamId: string;
+  type: "info" | "error" | "warning";
+  message: string;
+  timestamp: string;
+  metadata?: any;
+}
+
+export interface SquadValidationResult {
+  isValid: boolean;
+  errors: string[];
+  warnings: string[];
 }
