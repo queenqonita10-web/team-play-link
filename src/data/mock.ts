@@ -1,4 +1,4 @@
-import { Player, TrainingSession, AttendanceRecord, Payment, Tournament, Team, Match, StandingRow } from "@/types";
+import { Player, TrainingSession, AttendanceRecord, Payment, Invoice, Tournament, Team, Match, StandingRow } from "@/types";
 
 export const mockPlayers: Player[] = [
   {
