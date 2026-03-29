@@ -1,54 +1,53 @@
 
 
-# Enhanced Player Management Feature
+# Enhanced Player Management Module
 
-## What We're Building
+## What's Being Added
 
-A comprehensive player management system replacing the current simple list view. Includes full CRUD operations, player detail pages, document uploads, development notes, status tracking, and enhanced filtering.
+The player management already has CRUD, search/filter, detail pages, documents, and development notes. This plan adds the **missing fields** (NIK, Nama Ibu) and **improves the existing form with input validation using zod**.
 
 ## Changes
 
-### 1. Extend Player type (`src/types/index.ts`)
-Add new fields to the `Player` interface:
-- `parentEmail: string`
-- `address: string`
-- `status: "active" | "inactive"`
-- `documents: { birthCertificate?: string; familyCard?: string; photo?: string }` (URL strings for mock)
-- `developmentNotes: { id: string; date: string; type: "training" | "coach"; note: string; author: string }[]`
-
-Add a helper type `PlayerStatus = "active" | "inactive"`.
+### 1. Add NIK & motherName fields to Player type (`src/types/index.ts`)
+- Add `nik: string` (16-digit national ID) to `Player` interface
+- Add `motherName: string` to `Player` interface
 
 ### 2. Update mock data (`src/data/mock.ts`)
-Extend all 8 mock players with the new fields (parentEmail, address, status, documents, developmentNotes). Add a couple of development notes per player.
+- Add `nik` and `motherName` to all 8 mock players
 
-### 3. Add i18n strings (`src/i18n/en.ts`, `src/i18n/id.ts`)
-New keys under `ssb`: parentEmail, address, playerStatus, active, inactive, documents, birthCertificate, familyCard, playerPhoto, developmentNotes, trainingNote, coachNote, addNote, playerDetail, uploadDocument, age, years.
+### 3. Update i18n strings (`src/i18n/en.ts`, `src/i18n/id.ts`)
+- Add keys: `nik` ("NIK (National ID)" / "NIK (ID Nasional)"), `motherName` ("Mother's Name" / "Nama Ibu"), `nikValidation` ("NIK must be 16 digits" / "NIK harus 16 digit")
 
-### 4. Revamp Player List page (`src/pages/ssb/Players.tsx`)
-- Add status filter (all / active / inactive) alongside existing age filter
-- Auto-calculate and display age from dateOfBirth
-- Show status badge (green active / gray inactive)
-- "Add Player" button opens a dialog/sheet with full form
-- Clicking a player card navigates to `/ssb/players/:id`
+### 4. Update PlayerForm (`src/components/ssb/PlayerForm.tsx`)
+- Add NIK field with 16-digit numeric validation (zod schema)
+- Add Mother's Name field (required)
+- Add zod validation for all required fields: name (min 2 chars), dob (required), parentName (required), motherName (required), nik (exactly 16 digits, numeric), email (valid format if provided), phone (numeric if provided)
+- Show validation errors inline
 
-### 5. Create Player Detail page (`src/pages/ssb/PlayerDetail.tsx`)
-Tabbed layout with 3 tabs:
-- **Profile**: Full info display (name, DOB, age auto-calculated, position, age category auto-grouped, parent data, address, status toggle). Edit mode via button.
-- **Documents**: Cards showing upload status for birth certificate, family card, player photo. Mock upload buttons (no real upload, just UI).
-- **Development**: Timeline of training notes and coach notes. "Add Note" form at top with type selector, text area, and save button. All stored in local state.
+### 5. Update Player Detail page (`src/pages/ssb/PlayerDetail.tsx`)
+- Display NIK in profile tab
+- Display Mother's Name in parent info card
 
-### 6. Create Add/Edit Player form (`src/components/ssb/PlayerForm.tsx`)
-Dialog-based form with fields: name, dateOfBirth (with auto age/category calculation preview), position select, parent name, parent phone, parent email, address. Uses react-hook-form + zod validation. On submit, adds to local state (mock).
+### 6. Update Player List (`src/pages/ssb/Players.tsx`)
+- Show Mother's Name in player card subtitle (replace current parentName display with "Ibu: {motherName}")
 
-### 7. Add route for player detail (`src/App.tsx`)
-Add `<Route path="players/:id" element={<PlayerDetail />} />` under `/ssb`.
+## Validation Rules (zod)
+- `name`: string, min 2, max 100, required
+- `nik`: string, regex `/^\d{16}$/`, required
+- `dateOfBirth`: string, required (must be valid date)
+- `position`: enum of Position values
+- `parentName`: string, min 2, required
+- `motherName`: string, min 2, required
+- `parentPhone`: string, optional, numeric only if provided
+- `parentEmail`: string, optional, valid email if provided
+- `address`: string, optional, max 500
 
-### 8. Create age calculation utility (`src/lib/utils.ts`)
-- `calculateAge(dateOfBirth: string): number` — returns age in years
-- `getAgeCategory(dateOfBirth: string): AgeCategory` — auto-determines U8/U10/U12/U14/U17
-
-## Technical Notes
-- All data stays in React state (no backend). Players state will be lifted to a context or managed at the Players page level with URL params.
-- Document upload is UI-only (file picker opens but files are not persisted).
-- Development notes stored in component state, pre-populated from mock data.
+## Files Modified
+1. `src/types/index.ts` — add `nik`, `motherName` to Player
+2. `src/data/mock.ts` — add fields to mock players
+3. `src/i18n/en.ts` — add translation keys
+4. `src/i18n/id.ts` — add translation keys
+5. `src/components/ssb/PlayerForm.tsx` — add fields + zod validation
+6. `src/pages/ssb/PlayerDetail.tsx` — display NIK & motherName
+7. `src/pages/ssb/Players.tsx` — show motherName in card
 
