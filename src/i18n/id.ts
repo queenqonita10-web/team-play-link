@@ -106,6 +106,9 @@ export const id = {
     monthlyFee: "Iuran Bulanan",
     paymentStatus: "Status Pembayaran",
     paymentHistory: "Riwayat Pembayaran",
+    nik: "NIK (ID Nasional)",
+    motherName: "Nama Ibu",
+    nikValidation: "NIK harus 16 digit",
   },
   eo: {
     title: "Event Organizer",

@@ -103,6 +103,7 @@ export default function PlayerDetail() {
               <CardHeader><CardTitle className="text-base">Info Pemain</CardTitle></CardHeader>
               <CardContent className="space-y-3 text-sm">
                 <InfoRow icon={User} label={t.ssb.playerName} value={player.name} />
+                <InfoRow icon={FileText} label={t.ssb.nik} value={player.nik} />
                 <InfoRow icon={Calendar} label={t.ssb.dateOfBirth} value={player.dateOfBirth} />
                 <InfoRow icon={User} label={t.ssb.age} value={`${age} ${t.ssb.years}`} />
                 <InfoRow icon={User} label={t.ssb.ageCategory} value={autoCategory} />
@@ -114,6 +115,7 @@ export default function PlayerDetail() {
               <CardHeader><CardTitle className="text-base">{t.ssb.parentName}</CardTitle></CardHeader>
               <CardContent className="space-y-3 text-sm">
                 <InfoRow icon={User} label={t.ssb.parentName} value={player.parentName} />
+                <InfoRow icon={User} label={t.ssb.motherName} value={player.motherName} />
                 <InfoRow icon={Phone} label={t.ssb.parentPhone} value={player.parentPhone} />
                 <InfoRow icon={Mail} label={t.ssb.parentEmail} value={player.parentEmail} />
               </CardContent>

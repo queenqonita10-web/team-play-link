@@ -80,7 +80,7 @@ export default function Players() {
               <div className="flex-1 min-w-0">
                 <div className="font-medium truncate">{p.name}</div>
                 <div className="text-xs text-muted-foreground">
-                  {p.position} · {calculateAge(p.dateOfBirth)} {t.ssb.years} · {t.ssb.parentName}: {p.parentName}
+                  {p.position} · {calculateAge(p.dateOfBirth)} {t.ssb.years} · {t.ssb.motherName}: {p.motherName}
                 </div>
               </div>
               <div className="flex items-center gap-2">
