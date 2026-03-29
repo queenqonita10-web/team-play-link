@@ -23,10 +23,12 @@ export interface PlayerDocuments {
 export interface Player {
   id: string;
   name: string;
+  nik: string;
   dateOfBirth: string;
   ageCategory: AgeCategory;
   position: Position;
   parentName: string;
+  motherName: string;
   parentPhone: string;
   parentEmail: string;
   address: string;

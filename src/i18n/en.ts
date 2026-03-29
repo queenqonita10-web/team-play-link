@@ -106,6 +106,9 @@ export const en = {
     monthlyFee: "Monthly Fee",
     paymentStatus: "Payment Status",
     paymentHistory: "Payment History",
+    nik: "NIK (National ID)",
+    motherName: "Mother's Name",
+    nikValidation: "NIK must be 16 digits",
   },
   eo: {
     title: "Event Organizer",
