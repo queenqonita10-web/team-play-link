@@ -1,130 +1,54 @@
-# Football Grassroots Ecosystem Platform — MVP Plan
 
-## Overview
 
-Build the complete UI (no database yet) for both SSB and EO pillars, with bilingual support (ID/EN). All data will use mock/static data for now — Supabase integration comes later.
+# Enhanced Player Management Feature
 
-## Phase 1: Foundation & Layout
+## What We're Building
 
-**1. Bilingual system (i18n)**
+A comprehensive player management system replacing the current simple list view. Includes full CRUD operations, player detail pages, document uploads, development notes, status tracking, and enhanced filtering.
 
-- Create a simple context-based language switcher (ID/EN)
-- Translation files for all UI strings in `src/i18n/`
+## Changes
 
-**2. Landing page**
+### 1. Extend Player type (`src/types/index.ts`)
+Add new fields to the `Player` interface:
+- `parentEmail: string`
+- `address: string`
+- `status: "active" | "inactive"`
+- `documents: { birthCertificate?: string; familyCard?: string; photo?: string }` (URL strings for mock)
+- `developmentNotes: { id: string; date: string; type: "training" | "coach"; note: string; author: string }[]`
 
-- Hero section explaining the platform
-- Two CTA paths: "SSB (Akademi)" and "Event Organizer"
-- Feature highlights, footer
+Add a helper type `PlayerStatus = "active" | "inactive"`.
 
-**3. Auth pages (UI only)**
+### 2. Update mock data (`src/data/mock.ts`)
+Extend all 8 mock players with the new fields (parentEmail, address, status, documents, developmentNotes). Add a couple of development notes per player.
 
-- Login page with role selection (Admin SSB, Pelatih, Orang Tua, Admin EO)
-- Register page
-- No real auth — just navigation mock
+### 3. Add i18n strings (`src/i18n/en.ts`, `src/i18n/id.ts`)
+New keys under `ssb`: parentEmail, address, playerStatus, active, inactive, documents, birthCertificate, familyCard, playerPhoto, developmentNotes, trainingNote, coachNote, addNote, playerDetail, uploadDocument, age, years.
 
-**4. App shell / layout**
+### 4. Revamp Player List page (`src/pages/ssb/Players.tsx`)
+- Add status filter (all / active / inactive) alongside existing age filter
+- Auto-calculate and display age from dateOfBirth
+- Show status badge (green active / gray inactive)
+- "Add Player" button opens a dialog/sheet with full form
+- Clicking a player card navigates to `/ssb/players/:id`
 
-- Sidebar navigation (collapsible)
-- Top bar with user info, language toggle
-- Role-based menu items
+### 5. Create Player Detail page (`src/pages/ssb/PlayerDetail.tsx`)
+Tabbed layout with 3 tabs:
+- **Profile**: Full info display (name, DOB, age auto-calculated, position, age category auto-grouped, parent data, address, status toggle). Edit mode via button.
+- **Documents**: Cards showing upload status for birth certificate, family card, player photo. Mock upload buttons (no real upload, just UI).
+- **Development**: Timeline of training notes and coach notes. "Add Note" form at top with type selector, text area, and save button. All stored in local state.
 
-## Phase 2: SSB (Academy) Module - Mobile View
+### 6. Create Add/Edit Player form (`src/components/ssb/PlayerForm.tsx`)
+Dialog-based form with fields: name, dateOfBirth (with auto age/category calculation preview), position select, parent name, parent phone, parent email, address. Uses react-hook-form + zod validation. On submit, adds to local state (mock).
 
-**5. Dashboard SSB**
+### 7. Add route for player detail (`src/App.tsx`)
+Add `<Route path="players/:id" element={<PlayerDetail />} />` under `/ssb`.
 
-- Summary cards: total pemain, kehadiran hari ini, tagihan tertunggak
-- Quick actions
+### 8. Create age calculation utility (`src/lib/utils.ts`)
+- `calculateAge(dateOfBirth: string): number` — returns age in years
+- `getAgeCategory(dateOfBirth: string): AgeCategory` — auto-determines U8/U10/U12/U14/U17
 
-**6. Manajemen Pemain**
+## Technical Notes
+- All data stays in React state (no backend). Players state will be lifted to a context or managed at the Players page level with URL params.
+- Document upload is UI-only (file picker opens but files are not persisted).
+- Development notes stored in component state, pre-populated from mock data.
 
-- Player list with search/filter by age category (U8–U17)
-- Player detail page: profile, position, parent info, documents
-- Add/edit player form
-
-**7. Jadwal & Latihan**
-
-- Calendar view for training schedules
-- Training group assignment
-
-**8. Absensi**
-
-- Attendance list per session
-- Attendance statistics per player
-
-**9. Keuangan (simplified)**
-
-- Monthly fee list per player
-- Payment status tracking (paid/unpaid)
-
-## Phase 3: EO (Competition) Module
-
-**10. Dashboard EO**
-
-- Summary: active tournaments, registered teams, upcoming matches
-
-**11. Manajemen Kompetisi**
-
-- Create tournament form (name, format: group/knockout/festival, age categories)
-- Tournament list
-
-**12. Registrasi Tim**
-
-- Team registration list per tournament
-- Squad list view
-
-**13. Jadwal & Hasil Pertandingan**
-
-- Fixture list (mock auto-generated)
-- Match result input form (score, scorers, cards)
-
-**14. Klasemen**
-
-- Standings table
-- Top scorer table
-
-## Phase 4: Shared / Integration UI
-
-**15. Parent portal view**
-
-- Child's schedule, attendance, payment status (read-only)
-
-**16. Player profile (unified)**
-
-- Single player ID showing both academy data and competition history
-
-## Technical Approach
-
-- **Routing**: React Router with nested routes (`/ssb/*`, `/eo/*`, `/parent/*`)
-- **State**: React Context for auth mock + language; local state for forms
-- **Components**: shadcn/ui components already in project
-- **Data**: Mock data in `src/data/` as TypeScript constants
-- **Types**: Shared types in `src/types/` (Player, Team, Tournament, Match, etc.)
-- **i18n**: Simple context + JSON translation files, no heavy library
-
-## File structure (new)
-
-```
-src/
-  i18n/           — translations (id.ts, en.ts), LanguageContext
-  types/          — Player, Team, Tournament, Match, etc.
-  data/           — mock data
-  layouts/        — SSBLayout, EOLayout, ParentLayout
-  pages/
-    Landing.tsx
-    Login.tsx
-    Register.tsx
-    ssb/          — Dashboard, Players, Schedule, Attendance, Finance
-    eo/           — Dashboard, Tournaments, Teams, Fixtures, Standings
-    parent/       — ParentDashboard
-  components/
-    ssb/          — player cards, attendance forms, etc.
-    eo/           — match cards, standings table, etc.
-    shared/       — LanguageToggle, RoleGuard, etc.
-```
-
-## Build order
-
-Steps 1–4 first (foundation), then 5–9 (SSB), then 10–14 (EO), then 15–16 (integration). Each step produces visible, navigable UI.
-
-This is a large build — I will implement it incrementally across multiple messages, starting with the foundation (i18n, landing page, auth UI, app shell).
