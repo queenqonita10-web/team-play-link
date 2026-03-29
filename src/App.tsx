@@ -42,6 +42,7 @@ const App = () => (
               <Route path="/ssb" element={<AppLayout />}>
                 <Route index element={<SSBDashboard />} />
                 <Route path="players" element={<Players />} />
+                <Route path="players/:id" element={<PlayerDetail />} />
                 <Route path="schedule" element={<Schedule />} />
                 <Route path="attendance" element={<Attendance />} />
                 <Route path="finance" element={<Finance />} />
