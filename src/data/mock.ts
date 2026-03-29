@@ -1,4 +1,4 @@
-import { Player, TrainingSession, AttendanceRecord, Payment, Tournament, Team, Match, StandingRow } from "@/types";
+import { Player, TrainingSession, AttendanceRecord, Payment, Invoice, Tournament, Team, Match, StandingRow } from "@/types";
 
 export const mockPlayers: Player[] = [
   {
@@ -101,6 +101,31 @@ export const mockPayments: Payment[] = [
   { id: "pay6", playerId: "p6", month: "2026-03", amount: 350000, status: "unpaid", dueDate: "2026-03-10" },
   { id: "pay7", playerId: "p7", month: "2026-03", amount: 200000, status: "paid", dueDate: "2026-03-10", paidDate: "2026-03-05" },
   { id: "pay8", playerId: "p8", month: "2026-03", amount: 200000, status: "unpaid", dueDate: "2026-03-10" },
+];
+
+export const mockInvoices: Invoice[] = [
+  // January 2026
+  { id: "inv1", playerId: "p1", type: "monthly", description: "Iuran Bulanan Januari 2026", amount: 250000, status: "paid", dueDate: "2026-01-10", paidDate: "2026-01-08", createdAt: "2026-01-01", paymentMethod: "manual" },
+  { id: "inv2", playerId: "p2", type: "monthly", description: "Iuran Bulanan Januari 2026", amount: 250000, status: "paid", dueDate: "2026-01-10", paidDate: "2026-01-09", createdAt: "2026-01-01", paymentMethod: "midtrans" },
+  { id: "inv3", playerId: "p3", type: "monthly", description: "Iuran Bulanan Januari 2026", amount: 300000, status: "paid", dueDate: "2026-01-10", paidDate: "2026-01-07", createdAt: "2026-01-01", paymentMethod: "xendit" },
+  { id: "inv4", playerId: "p4", type: "monthly", description: "Iuran Bulanan Januari 2026", amount: 300000, status: "paid", dueDate: "2026-01-10", paidDate: "2026-01-10", createdAt: "2026-01-01", paymentMethod: "manual" },
+  { id: "inv5", playerId: "p5", type: "registration", description: "Biaya Pendaftaran", amount: 500000, status: "paid", dueDate: "2026-01-15", paidDate: "2026-01-12", createdAt: "2026-01-01", paymentMethod: "midtrans" },
+  // February 2026
+  { id: "inv6", playerId: "p1", type: "monthly", description: "Iuran Bulanan Februari 2026", amount: 250000, status: "paid", dueDate: "2026-02-10", paidDate: "2026-02-08", createdAt: "2026-02-01", paymentMethod: "manual" },
+  { id: "inv7", playerId: "p2", type: "monthly", description: "Iuran Bulanan Februari 2026", amount: 250000, status: "paid", dueDate: "2026-02-10", paidDate: "2026-02-10", createdAt: "2026-02-01", paymentMethod: "xendit" },
+  { id: "inv8", playerId: "p3", type: "monthly", description: "Iuran Bulanan Februari 2026", amount: 300000, status: "paid", dueDate: "2026-02-10", paidDate: "2026-02-09", createdAt: "2026-02-01", paymentMethod: "manual" },
+  { id: "inv9", playerId: "p4", type: "monthly", description: "Iuran Bulanan Februari 2026", amount: 300000, status: "overdue", dueDate: "2026-02-10", createdAt: "2026-02-01" },
+  // March 2026
+  { id: "inv10", playerId: "p1", type: "monthly", description: "Iuran Bulanan Maret 2026", amount: 250000, status: "paid", dueDate: "2026-03-10", paidDate: "2026-03-08", createdAt: "2026-03-01", paymentMethod: "midtrans" },
+  { id: "inv11", playerId: "p2", type: "monthly", description: "Iuran Bulanan Maret 2026", amount: 250000, status: "pending", dueDate: "2026-03-10", createdAt: "2026-03-01" },
+  { id: "inv12", playerId: "p3", type: "monthly", description: "Iuran Bulanan Maret 2026", amount: 300000, status: "paid", dueDate: "2026-03-10", paidDate: "2026-03-09", createdAt: "2026-03-01", paymentMethod: "xendit" },
+  { id: "inv13", playerId: "p4", type: "monthly", description: "Iuran Bulanan Maret 2026", amount: 300000, status: "pending", dueDate: "2026-03-10", createdAt: "2026-03-01" },
+  { id: "inv14", playerId: "p5", type: "monthly", description: "Iuran Bulanan Maret 2026", amount: 350000, status: "paid", dueDate: "2026-03-10", paidDate: "2026-03-07", createdAt: "2026-03-01", paymentMethod: "manual" },
+  { id: "inv15", playerId: "p6", type: "monthly", description: "Iuran Bulanan Maret 2026", amount: 350000, status: "overdue", dueDate: "2026-03-10", createdAt: "2026-03-01" },
+  { id: "inv16", playerId: "p7", type: "monthly", description: "Iuran Bulanan Maret 2026", amount: 200000, status: "paid", dueDate: "2026-03-10", paidDate: "2026-03-05", createdAt: "2026-03-01", paymentMethod: "manual" },
+  { id: "inv17", playerId: "p8", type: "monthly", description: "Iuran Bulanan Maret 2026", amount: 200000, status: "pending", dueDate: "2026-03-10", createdAt: "2026-03-01" },
+  { id: "inv18", playerId: "p3", type: "event", description: "Biaya Turnamen Piala Bupati Cup", amount: 150000, status: "paid", dueDate: "2026-03-20", paidDate: "2026-03-18", createdAt: "2026-03-01", paymentMethod: "midtrans" },
+  { id: "inv19", playerId: "p4", type: "event", description: "Biaya Turnamen Piala Bupati Cup", amount: 150000, status: "pending", dueDate: "2026-03-20", createdAt: "2026-03-01" },
 ];
 
 export const mockTournaments: Tournament[] = [

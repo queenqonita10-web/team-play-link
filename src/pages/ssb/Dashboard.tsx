@@ -1,17 +1,17 @@
 import { useLanguage } from "@/i18n/LanguageContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { mockPlayers, mockPayments, mockTrainingSessions } from "@/data/mock";
+import { mockPlayers, mockInvoices, mockTrainingSessions } from "@/data/mock";
 import { Users, ClipboardCheck, Wallet, Calendar } from "lucide-react";
 
 export default function SSBDashboard() {
   const { t } = useLanguage();
-  const unpaid = mockPayments.filter((p) => p.status === "unpaid").length;
+  const pendingCount = mockInvoices.filter((i) => i.status === "pending" || i.status === "overdue").length;
   const upcoming = mockTrainingSessions.filter((s) => s.date >= "2026-03-29").length;
 
   const stats = [
     { label: t.ssb.totalPlayers, value: mockPlayers.length, icon: Users, color: "text-primary" },
     { label: t.ssb.todayAttendance, value: "75%", icon: ClipboardCheck, color: "text-emerald-500" },
-    { label: t.ssb.pendingPayments, value: unpaid, icon: Wallet, color: "text-amber-500" },
+    { label: t.ssb.pendingPayments, value: pendingCount, icon: Wallet, color: "text-amber-500" },
     { label: t.ssb.upcomingTraining, value: upcoming, icon: Calendar, color: "text-blue-500" },
   ];
 
