@@ -68,6 +68,19 @@ export interface Payment {
   paidDate?: string;
 }
 
+export interface Invoice {
+  id: string;
+  playerId: string;
+  type: PaymentType;
+  description: string;
+  amount: number;
+  status: PaymentStatus;
+  dueDate: string;
+  paidDate?: string;
+  createdAt: string;
+  paymentMethod?: "midtrans" | "xendit" | "manual";
+}
+
 export interface Tournament {
   id: string;
   name: string;
