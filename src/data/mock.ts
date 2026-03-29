@@ -1,0 +1,67 @@
+import { Player, TrainingSession, AttendanceRecord, Payment, Tournament, Team, Match, StandingRow } from "@/types";
+
+export const mockPlayers: Player[] = [
+  { id: "p1", name: "Ahmad Rizki", dateOfBirth: "2016-03-15", ageCategory: "U10", position: "ST", parentName: "Budi Rizki", parentPhone: "08123456789", ssbId: "ssb1" },
+  { id: "p2", name: "Dimas Pratama", dateOfBirth: "2016-07-22", ageCategory: "U10", position: "CM", parentName: "Andi Pratama", parentPhone: "08134567890", ssbId: "ssb1" },
+  { id: "p3", name: "Fajar Setiawan", dateOfBirth: "2014-01-10", ageCategory: "U12", position: "GK", parentName: "Rudi Setiawan", parentPhone: "08145678901", ssbId: "ssb1" },
+  { id: "p4", name: "Galih Permana", dateOfBirth: "2014-05-28", ageCategory: "U12", position: "CB", parentName: "Hendra Permana", parentPhone: "08156789012", ssbId: "ssb1" },
+  { id: "p5", name: "Irfan Hakim", dateOfBirth: "2012-11-03", ageCategory: "U14", position: "LW", parentName: "Joko Hakim", parentPhone: "08167890123", ssbId: "ssb1" },
+  { id: "p6", name: "Kresna Aditya", dateOfBirth: "2012-08-17", ageCategory: "U14", position: "RB", parentName: "Slamet Aditya", parentPhone: "08178901234", ssbId: "ssb1" },
+  { id: "p7", name: "Mahesa Putra", dateOfBirth: "2018-02-14", ageCategory: "U8", position: "ST", parentName: "Wawan Putra", parentPhone: "08189012345", ssbId: "ssb1" },
+  { id: "p8", name: "Naufal Aziz", dateOfBirth: "2018-06-30", ageCategory: "U8", position: "CM", parentName: "Yusuf Aziz", parentPhone: "08190123456", ssbId: "ssb1" },
+];
+
+export const mockTrainingSessions: TrainingSession[] = [
+  { id: "ts1", date: "2026-03-30", time: "07:00", group: "Group A", ageCategory: "U10", venue: "Lapangan Merdeka", coach: "Coach Agus" },
+  { id: "ts2", date: "2026-03-30", time: "09:00", group: "Group B", ageCategory: "U12", venue: "Lapangan Merdeka", coach: "Coach Bimo" },
+  { id: "ts3", date: "2026-03-31", time: "07:00", group: "Group A", ageCategory: "U14", venue: "Lapangan Garuda", coach: "Coach Agus" },
+  { id: "ts4", date: "2026-04-01", time: "15:00", group: "Group C", ageCategory: "U8", venue: "Lapangan Merdeka", coach: "Coach Citra" },
+  { id: "ts5", date: "2026-04-02", time: "07:00", group: "Group A", ageCategory: "U10", venue: "Lapangan Merdeka", coach: "Coach Agus" },
+];
+
+export const mockAttendance: AttendanceRecord[] = [
+  { id: "a1", playerId: "p1", sessionId: "ts1", date: "2026-03-30", status: "present" },
+  { id: "a2", playerId: "p2", sessionId: "ts1", date: "2026-03-30", status: "present" },
+  { id: "a3", playerId: "p3", sessionId: "ts2", date: "2026-03-30", status: "absent" },
+  { id: "a4", playerId: "p4", sessionId: "ts2", date: "2026-03-30", status: "present" },
+  { id: "a5", playerId: "p5", sessionId: "ts3", date: "2026-03-31", status: "present" },
+  { id: "a6", playerId: "p6", sessionId: "ts3", date: "2026-03-31", status: "present" },
+];
+
+export const mockPayments: Payment[] = [
+  { id: "pay1", playerId: "p1", month: "2026-03", amount: 250000, status: "paid", dueDate: "2026-03-10", paidDate: "2026-03-08" },
+  { id: "pay2", playerId: "p2", month: "2026-03", amount: 250000, status: "unpaid", dueDate: "2026-03-10" },
+  { id: "pay3", playerId: "p3", month: "2026-03", amount: 300000, status: "paid", dueDate: "2026-03-10", paidDate: "2026-03-09" },
+  { id: "pay4", playerId: "p4", month: "2026-03", amount: 300000, status: "unpaid", dueDate: "2026-03-10" },
+  { id: "pay5", playerId: "p5", month: "2026-03", amount: 350000, status: "paid", dueDate: "2026-03-10", paidDate: "2026-03-07" },
+  { id: "pay6", playerId: "p6", month: "2026-03", amount: 350000, status: "unpaid", dueDate: "2026-03-10" },
+  { id: "pay7", playerId: "p7", month: "2026-03", amount: 200000, status: "paid", dueDate: "2026-03-10", paidDate: "2026-03-05" },
+  { id: "pay8", playerId: "p8", month: "2026-03", amount: 200000, status: "unpaid", dueDate: "2026-03-10" },
+];
+
+export const mockTournaments: Tournament[] = [
+  { id: "t1", name: "Piala Bupati Cup 2026", format: "group", ageCategories: ["U12", "U14"], startDate: "2026-04-15", endDate: "2026-04-30", venue: "Stadion Gelora", status: "upcoming", teamsCount: 16 },
+  { id: "t2", name: "Festival Anak Garuda", format: "festival", ageCategories: ["U8", "U10"], startDate: "2026-05-01", endDate: "2026-05-03", venue: "Lapangan Merdeka", status: "upcoming", teamsCount: 12 },
+  { id: "t3", name: "Liga Junior Kota", format: "group", ageCategories: ["U12"], startDate: "2026-03-01", endDate: "2026-06-30", venue: "Various", status: "ongoing", teamsCount: 8 },
+];
+
+export const mockTeams: Team[] = [
+  { id: "tm1", name: "Garuda Muda A", ssbName: "SSB Garuda Muda", ageCategory: "U12", tournamentId: "t3", players: ["p3", "p4"] },
+  { id: "tm2", name: "Elang Jaya A", ssbName: "SSB Elang Jaya", ageCategory: "U12", tournamentId: "t3", players: [] },
+  { id: "tm3", name: "Persib Junior", ssbName: "SSB Persib Academy", ageCategory: "U12", tournamentId: "t3", players: [] },
+  { id: "tm4", name: "Sriwijaya Muda", ssbName: "SSB Sriwijaya FC", ageCategory: "U12", tournamentId: "t3", players: [] },
+];
+
+export const mockMatches: Match[] = [
+  { id: "m1", tournamentId: "t3", homeTeam: "Garuda Muda A", awayTeam: "Elang Jaya A", homeScore: 2, awayScore: 1, date: "2026-03-15", time: "08:00", venue: "Lapangan A", stage: "Group A - MD1", status: "completed", scorers: [{ playerId: "p3", playerName: "Fajar S.", team: "Garuda Muda A", minute: 23 }, { playerId: "p4", playerName: "Galih P.", team: "Garuda Muda A", minute: 55 }] },
+  { id: "m2", tournamentId: "t3", homeTeam: "Persib Junior", awayTeam: "Sriwijaya Muda", homeScore: 0, awayScore: 0, date: "2026-03-15", time: "10:00", venue: "Lapangan B", stage: "Group A - MD1", status: "completed" },
+  { id: "m3", tournamentId: "t3", homeTeam: "Garuda Muda A", awayTeam: "Persib Junior", date: "2026-03-29", time: "08:00", venue: "Lapangan A", stage: "Group A - MD2", status: "scheduled" },
+  { id: "m4", tournamentId: "t3", homeTeam: "Elang Jaya A", awayTeam: "Sriwijaya Muda", date: "2026-03-29", time: "10:00", venue: "Lapangan B", stage: "Group A - MD2", status: "scheduled" },
+];
+
+export const mockStandings: StandingRow[] = [
+  { teamId: "tm1", teamName: "Garuda Muda A", played: 1, won: 1, drawn: 0, lost: 0, goalsFor: 2, goalsAgainst: 1, goalDifference: 1, points: 3 },
+  { teamId: "tm3", teamName: "Persib Junior", played: 1, won: 0, drawn: 1, lost: 0, goalsFor: 0, goalsAgainst: 0, goalDifference: 0, points: 1 },
+  { teamId: "tm4", teamName: "Sriwijaya Muda", played: 1, won: 0, drawn: 1, lost: 0, goalsFor: 0, goalsAgainst: 0, goalDifference: 0, points: 1 },
+  { teamId: "tm2", teamName: "Elang Jaya A", played: 1, won: 0, drawn: 0, lost: 1, goalsFor: 1, goalsAgainst: 2, goalDifference: -1, points: 0 },
+];
