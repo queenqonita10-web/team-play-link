@@ -11,7 +11,7 @@ export default function SSBDashboard() {
   const stats = [
     { label: t.ssb.totalPlayers, value: mockPlayers.length, icon: Users, color: "text-primary" },
     { label: t.ssb.todayAttendance, value: "75%", icon: ClipboardCheck, color: "text-emerald-500" },
-    { label: t.ssb.pendingPayments, value: unpaid, icon: Wallet, color: "text-amber-500" },
+    { label: t.ssb.pendingPayments, value: pendingCount, icon: Wallet, color: "text-amber-500" },
     { label: t.ssb.upcomingTraining, value: upcoming, icon: Calendar, color: "text-blue-500" },
   ];
 
