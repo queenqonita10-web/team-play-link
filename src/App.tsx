@@ -12,6 +12,7 @@ import Register from "./pages/Register";
 import AppLayout from "./layouts/AppLayout";
 import SSBDashboard from "./pages/ssb/Dashboard";
 import Players from "./pages/ssb/Players";
+import PlayerDetail from "./pages/ssb/PlayerDetail";
 import Schedule from "./pages/ssb/Schedule";
 import Attendance from "./pages/ssb/Attendance";
 import Finance from "./pages/ssb/Finance";
