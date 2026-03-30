@@ -50,7 +50,7 @@ const playerSchema = z.object({
   dateOfBirth: z.string().min(1, "Tanggal lahir wajib diisi"),
   email: z.string().email("Format email tidak valid").optional().or(z.literal("")),
   phone: z.string().min(10, "Nomor telepon tidak valid").optional().or(z.literal("")),
-  position: z.enum(["goalkeeper", "defender", "midfielder", "forward"]),
+  position: z.enum(["goalkeeper", "defender", "midfielder", "forward", "GK", "CB", "LB", "RB", "CM", "LM", "RM", "CAM", "ST", "LW", "RW"]),
   status: z.enum(["active", "inactive"]),
   address: z.string().min(5, "Alamat terlalu pendek"),
   parent: z.object({

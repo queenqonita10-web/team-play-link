@@ -3,7 +3,6 @@ import { useLocation } from "react-router-dom";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { NAVIGATION_CONFIG, NavItem, NavGroup } from "@/config/navigation";
-import { UserRole } from "@/types";
 
 export function useNavigationItems(searchQuery: string = "") {
   const { t } = useLanguage();
@@ -31,13 +30,13 @@ export function useNavigationItems(searchQuery: string = "") {
       const filteredItems = group.items.filter(item => {
         // 1. Role-based filtering
         let hasAccess = false;
-        if (user.role === "super_admin") {
+        if ((user.role as string) === "super_admin") {
           hasAccess = true;
         } else if (item.roles && item.roles.includes(user.role)) {
           hasAccess = true;
         } else {
           // Portal-wide default access
-          const isSuperAdmin = user.role === "super_admin";
+          const isSuperAdmin = (user.role as string) === "super_admin";
           
           switch (portalInfo.key) {
             case "ssb":

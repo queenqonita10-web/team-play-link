@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
 import { UserRole } from "@/types";
+export type { UserRole };
 
 interface User {
   id: string;

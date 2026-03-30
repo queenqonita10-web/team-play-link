@@ -24,6 +24,11 @@ import Fixtures from "./pages/eo/Fixtures";
 import Standings from "./pages/eo/Standings";
 import Registrations from "./pages/eo/Registrations";
 import ParentDashboard from "./pages/parent/ParentDashboard";
+import ParentSchedule from "./pages/parent/ParentSchedule";
+import ParentProgress from "./pages/parent/ParentProgress";
+import ParentFinance from "./pages/parent/ParentFinance";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import ScoutDashboard from "./pages/scout/ScoutDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -62,6 +67,17 @@ const App = () => (
 
               <Route path="/parent" element={<AppLayout />}>
                 <Route index element={<ParentDashboard />} />
+                <Route path="schedule" element={<ParentSchedule />} />
+                <Route path="progress" element={<ParentProgress />} />
+                <Route path="finance" element={<ParentFinance />} />
+              </Route>
+
+              <Route path="/admin" element={<AppLayout />}>
+                <Route index element={<AdminDashboard />} />
+              </Route>
+
+              <Route path="/scout" element={<AppLayout />}>
+                <Route index element={<ScoutDashboard />} />
               </Route>
 
               <Route path="*" element={<NotFound />} />

@@ -1,4 +1,5 @@
 export type UserRole = "super_admin" | "eo_admin" | "eo_operator" | "ssb_admin" | "coach" | "parent" | "scout";
+export { type UserRole as UserRoleType };
 export type OrganizationType = "ssb" | "eo" | "scouting_agency";
 
 export interface User {
@@ -19,8 +20,8 @@ export interface Organization {
   logoUrl?: string;
 }
 
-export type AgeCategory = "U9" | "U11" | "U13" | "U15" | "U17" | "U20" | "Senior";
-export type Position = "goalkeeper" | "defender" | "midfielder" | "forward";
+export type AgeCategory = "U8" | "U9" | "U10" | "U11" | "U12" | "U13" | "U14" | "U15" | "U17" | "U18" | "U20" | "Senior";
+export type Position = "goalkeeper" | "defender" | "midfielder" | "forward" | "GK" | "CB" | "LB" | "RB" | "CM" | "LM" | "RM" | "CAM" | "ST" | "LW" | "RW";
 export type CompetitionType = "league" | "tournament";
 export type TournamentFormat = "group" | "knockout" | "hybrid";
 export type MatchStatus = "scheduled" | "live" | "completed" | "cancelled" | "postponed";
@@ -121,7 +122,13 @@ export interface Player {
   
   statusLogs?: PlayerStatusLog[];
   
-  competitionHistory: CompetitionHistory[];
+  // Legacy flat fields (deprecated, use parent object)
+  parentName?: string;
+  motherName?: string;
+  parentPhone?: string;
+  parentEmail?: string;
+
+  competitionHistory?: CompetitionHistory[];
   developmentNotes: DevelopmentNote[];
   skillRatings?: SkillRating[];
   evaluations?: CoachEvaluation[];
@@ -451,7 +458,7 @@ export interface TournamentTeam {
   registeredAt: string;
   players: string[]; // Player Global IDs
   submittedAt?: string;
-  officialId: string; // User ID of the submitter
+  officialId?: string; // User ID of the submitter
 }
 
 export interface RegistrationLog {

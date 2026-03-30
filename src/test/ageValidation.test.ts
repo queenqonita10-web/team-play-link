@@ -11,20 +11,17 @@ describe("Comprehensive Age Category Validation", () => {
     name: "Test Player",
     dateOfBirth: dob,
     nik: "123",
+    age: 0,
     email: "test@test.com",
     phone: "123",
     ageCategory: "U10",
     position: "ST",
-    parentName: "Parent",
-    motherName: "Mother",
-    parentPhone: "123",
-    parentEmail: "test@test.com",
+    parent: { motherName: "Mother", contactNumber: "123", relationshipType: "Mother", email: "test@test.com" },
     address: "Address",
     ssbId: "ssb1",
     status: "active",
     verificationStatus: "verified",
     documents: {},
-    competitionHistory: [],
     developmentNotes: [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
@@ -36,7 +33,8 @@ describe("Comprehensive Age Category Validation", () => {
     ageCategory: ageCat as any,
     minAge: min,
     maxAge: max,
-    maxTeams: 16
+    maxTeams: 16,
+    registrationFee: 500000
   });
 
   it("should validate U8 correctly (age < 8)", () => {

@@ -153,19 +153,19 @@ export default function Fixtures() {
                       </div>
                     </div>
 
-                    {m.statistics?.scorers && m.statistics.scorers.length > 0 && (
+                    {m.goals && m.goals.length > 0 && (
                       <div className="mt-8 pt-4 border-t grid grid-cols-2 gap-8">
                         <div className="space-y-1 text-right">
-                          {m.statistics.scorers.filter(s => s.teamId === m.homeTeamId).map((s, i) => (
+                          {m.goals.filter(g => g.teamId === m.homeTeamId).map((g, i) => (
                             <div key={i} className="text-xs text-muted-foreground">
-                              {s.minute}' ⚽
+                              {g.minute}' ⚽
                             </div>
                           ))}
                         </div>
                         <div className="space-y-1">
-                          {m.statistics.scorers.filter(s => s.teamId === m.awayTeamId).map((s, i) => (
+                          {m.goals.filter(g => g.teamId === m.awayTeamId).map((g, i) => (
                             <div key={i} className="text-xs text-muted-foreground">
-                              ⚽ {s.minute}'
+                              ⚽ {g.minute}'
                             </div>
                           ))}
                         </div>

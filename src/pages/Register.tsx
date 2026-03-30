@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/i18n/LanguageContext";
-import { useAuth, UserRole } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { UserRole } from "@/types";
 import { LanguageToggle } from "@/components/shared/LanguageToggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,16 +24,22 @@ export default function Register() {
     e.preventDefault();
     if (!role) return;
     register(name, email, password, role);
-    if (role === "admin_ssb" || role === "coach") navigate("/ssb");
-    else if (role === "admin_eo") navigate("/eo");
-    else navigate("/parent");
+    if (role === "ssb_admin" || role === "coach") navigate("/ssb");
+    else if (role === "eo_admin" || role === "eo_operator") navigate("/eo");
+    else if (role === "parent") navigate("/parent");
+    else if (role === "scout") navigate("/scout");
+    else if (role === "super_admin") navigate("/admin");
+    else navigate("/ssb");
   };
 
   const roles: { value: UserRole; label: string }[] = [
-    { value: "admin_ssb", label: t.auth.roleAdminSSB },
+    { value: "ssb_admin", label: t.auth.roleAdminSSB },
     { value: "coach", label: t.auth.roleCoach },
     { value: "parent", label: t.auth.roleParent },
-    { value: "admin_eo", label: t.auth.roleAdminEO },
+    { value: "eo_admin", label: t.auth.roleAdminEO },
+    { value: "eo_operator", label: t.auth.roleEOOperator || "EO Operator" },
+    { value: "scout", label: t.auth.roleScout || "Scout" },
+    { value: "super_admin", label: t.auth.roleSuperAdmin || "Super Admin" },
   ];
 
   return (

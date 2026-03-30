@@ -9,20 +9,17 @@ describe('Single Player Identity Logic & Age Validation', () => {
     name: 'Ahmad Rizki',
     nik: '3201010503160001',
     dateOfBirth: '2016-03-15',
+    age: 10,
     email: 'ahmad@email.com',
     phone: '08123456789',
     ageCategory: 'U10',
     position: 'ST',
-    parentName: 'Budi Rizki',
-    motherName: 'Siti Aminah',
-    parentPhone: '08123456789',
-    parentEmail: 'budi.rizki@email.com',
+    parent: { motherName: 'Siti Aminah', contactNumber: '08123456789', relationshipType: 'Mother', email: 'budi.rizki@email.com' },
     address: 'Jl. Merdeka No. 12, Jakarta',
     ssbId: 'ssb1',
     status: 'active',
     verificationStatus: 'verified',
     documents: {},
-    competitionHistory: [],
     developmentNotes: [],
     createdAt: '2026-01-01T00:00:00Z',
     updatedAt: '2026-01-01T00:00:00Z'
@@ -34,7 +31,8 @@ describe('Single Player Identity Logic & Age Validation', () => {
     ageCategory: ageCat as any,
     minAge,
     maxAge,
-    maxTeams: 16
+    maxTeams: 16,
+    registrationFee: 500000
   });
 
   describe('Age Validation Rules', () => {
