@@ -31,7 +31,8 @@ describe('Single Player Identity Logic & Age Validation', () => {
     ageCategory: ageCat as any,
     minAge,
     maxAge,
-    maxTeams: 16
+    maxTeams: 16,
+    registrationFee: 500000
   });
 
   describe('Age Validation Rules', () => {

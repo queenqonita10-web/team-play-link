@@ -9,16 +9,20 @@ describe("Registration Logic Validation", () => {
     ageCategory: "U12",
     minAge: 10,
     maxAge: 11,
-    maxTeams: 16
+    maxTeams: 16,
+    registrationFee: 500000
   };
 
   const competitionDate = "2026-04-01";
 
   const validPlayer: Player = {
-    id: "p1", globalId: "G1", name: "Player 1", nik: "123", 
+    id: "p1", globalId: "G1", name: "Player 1", nik: "123", age: 11,
     dateOfBirth: "2015-01-01", ageCategory: "U12", position: "GK",
-    parentName: "", motherName: "", parentPhone: "", parentEmail: "", 
-    address: "", ssbId: "ssb1", status: "active", documents: {}, developmentNotes: []
+    email: "", phone: "",
+    parent: { motherName: "", contactNumber: "", relationshipType: "Mother" },
+    address: "", ssbId: "ssb1", status: "active", verificationStatus: "unverified",
+    documents: {}, developmentNotes: [],
+    createdAt: "", updatedAt: ""
   };
 
   describe("checkAge", () => {
