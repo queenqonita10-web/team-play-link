@@ -458,7 +458,7 @@ export interface TournamentTeam {
   registeredAt: string;
   players: string[]; // Player Global IDs
   submittedAt?: string;
-  officialId: string; // User ID of the submitter
+  officialId?: string; // User ID of the submitter
 }
 
 export interface RegistrationLog {
