@@ -3,7 +3,6 @@ import { useLocation } from "react-router-dom";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { NAVIGATION_CONFIG, NavItem, NavGroup } from "@/config/navigation";
-import { UserRole } from "@/types";
 
 export function useNavigationItems(searchQuery: string = "") {
   const { t } = useLanguage();
