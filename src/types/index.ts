@@ -20,7 +20,7 @@ export interface Organization {
   logoUrl?: string;
 }
 
-export type AgeCategory = "U9" | "U11" | "U13" | "U15" | "U17" | "U20" | "Senior";
+export type AgeCategory = "U8" | "U9" | "U10" | "U11" | "U12" | "U13" | "U14" | "U15" | "U17" | "U18" | "U20" | "Senior";
 export type Position = "goalkeeper" | "defender" | "midfielder" | "forward";
 export type CompetitionType = "league" | "tournament";
 export type TournamentFormat = "group" | "knockout" | "hybrid";
