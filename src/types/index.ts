@@ -1,4 +1,5 @@
 export type UserRole = "super_admin" | "eo_admin" | "eo_operator" | "ssb_admin" | "coach" | "parent" | "scout";
+export { type UserRole as UserRoleType };
 export type OrganizationType = "ssb" | "eo" | "scouting_agency";
 
 export interface User {
