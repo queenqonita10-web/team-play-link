@@ -21,7 +21,7 @@ export interface Organization {
 }
 
 export type AgeCategory = "U8" | "U9" | "U10" | "U11" | "U12" | "U13" | "U14" | "U15" | "U17" | "U18" | "U20" | "Senior";
-export type Position = "goalkeeper" | "defender" | "midfielder" | "forward";
+export type Position = "goalkeeper" | "defender" | "midfielder" | "forward" | "GK" | "CB" | "LB" | "RB" | "CM" | "LM" | "RM" | "CAM" | "ST" | "LW" | "RW";
 export type CompetitionType = "league" | "tournament";
 export type TournamentFormat = "group" | "knockout" | "hybrid";
 export type MatchStatus = "scheduled" | "live" | "completed" | "cancelled" | "postponed";
