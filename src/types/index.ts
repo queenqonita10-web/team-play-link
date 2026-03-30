@@ -122,7 +122,13 @@ export interface Player {
   
   statusLogs?: PlayerStatusLog[];
   
-  competitionHistory: CompetitionHistory[];
+  // Legacy flat fields (deprecated, use parent object)
+  parentName?: string;
+  motherName?: string;
+  parentPhone?: string;
+  parentEmail?: string;
+
+  competitionHistory?: CompetitionHistory[];
   developmentNotes: DevelopmentNote[];
   skillRatings?: SkillRating[];
   evaluations?: CoachEvaluation[];
