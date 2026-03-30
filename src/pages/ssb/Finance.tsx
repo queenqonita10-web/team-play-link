@@ -218,8 +218,8 @@ export default function Finance() {
                                   open: true,
                                   invoice: inv,
                                   playerName: player?.name || "",
-                                  phone: player?.parentPhone || "",
-                                  email: player?.parentEmail || "",
+                                  phone: player?.parent?.contactNumber || player?.parentPhone || "",
+                                  email: player?.parent?.email || player?.parentEmail || "",
                                 })
                               }
                             >

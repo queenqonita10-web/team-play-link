@@ -22,6 +22,7 @@ import {
   SelectValue 
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";

@@ -120,10 +120,10 @@ export default function PlayerDetail() {
             <Card>
               <CardHeader><CardTitle className="text-base">{t.ssb.parentName}</CardTitle></CardHeader>
               <CardContent className="space-y-3 text-sm">
-                <InfoRow icon={User} label={t.ssb.parentName} value={player.parentName} />
-                <InfoRow icon={User} label={t.ssb.motherName} value={player.motherName} />
-                <InfoRow icon={Phone} label={t.ssb.parentPhone} value={player.parentPhone} />
-                <InfoRow icon={Mail} label={t.ssb.parentEmail} value={player.parentEmail} />
+                <InfoRow icon={User} label={t.ssb.parentName} value={player.parent?.motherName || player.parentName || "-"} />
+                <InfoRow icon={User} label={t.ssb.motherName} value={player.parent?.motherName || player.motherName || "-"} />
+                <InfoRow icon={Phone} label={t.ssb.parentPhone} value={player.parent?.contactNumber || player.parentPhone || "-"} />
+                <InfoRow icon={Mail} label={t.ssb.parentEmail} value={player.parent?.email || player.parentEmail || "-"} />
               </CardContent>
             </Card>
           </div>

@@ -6,6 +6,7 @@ import {
   MatchGoal, 
   MatchCard, 
   MatchStatistics,
+  MatchStatus,
   GoalType,
   CardType
 } from "@/types";

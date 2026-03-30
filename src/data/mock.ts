@@ -113,38 +113,50 @@ export const mockPlayers: Player[] = [
     createdAt: "2026-01-15T00:00:00Z", updatedAt: "2026-03-19T00:00:00Z"
   },
   {
-    id: "p5", globalId: "P-2026-0005", name: "Irfan Hakim", nik: "3578010311120005", dateOfBirth: "2012-11-03", ageCategory: "U15", position: "LW",
+    id: "p5", globalId: "P-2026-0005", name: "Irfan Hakim", nik: "3578010311120005", dateOfBirth: "2012-11-03", age: 13, ageCategory: "U15", position: "LW",
+    email: "irfan@email.com", phone: "08167890123",
+    parent: { motherName: "Fatimah Zahra", contactNumber: "08167890123", relationshipType: "Mother", email: "joko.hakim@email.com" },
     parentName: "Joko Hakim", motherName: "Fatimah Zahra", parentPhone: "08167890123", parentEmail: "joko.hakim@email.com",
-    address: "Jl. Diponegoro No. 56, Surabaya", ssbId: "ssb1", status: "active",
+    address: "Jl. Diponegoro No. 56, Surabaya", ssbId: "ssb1", status: "active", verificationStatus: "verified",
     documents: { birthCertificate: "/placeholder.svg", photo: "/placeholder.svg" },
     developmentNotes: [
       { id: "dn7", date: "2026-03-25", type: "coach", note: "Speed luar biasa. Perlu perbaikan crossing.", author: "Coach Agus" },
     ],
+    createdAt: "2026-02-01T00:00:00Z", updatedAt: "2026-03-25T00:00:00Z"
   },
   {
-    id: "p6", globalId: "P-2026-0006", name: "Kresna Aditya", nik: "3578011708120006", dateOfBirth: "2012-08-17", ageCategory: "U15", position: "RB",
+    id: "p6", globalId: "P-2026-0006", name: "Kresna Aditya", nik: "3578011708120006", dateOfBirth: "2012-08-17", age: 13, ageCategory: "U15", position: "RB",
+    email: "kresna@email.com", phone: "08178901234",
+    parent: { motherName: "Kartini Sari", contactNumber: "08178901234", relationshipType: "Mother", email: "slamet.aditya@email.com" },
     parentName: "Slamet Aditya", motherName: "Kartini Sari", parentPhone: "08178901234", parentEmail: "slamet.aditya@email.com",
-    address: "Jl. Pemuda No. 34, Surabaya", ssbId: "ssb1", status: "inactive",
+    address: "Jl. Pemuda No. 34, Surabaya", ssbId: "ssb1", status: "inactive", verificationStatus: "unverified",
     documents: {},
     developmentNotes: [
       { id: "dn8", date: "2026-02-28", type: "coach", note: "Pemain disiplin. Saat ini istirahat karena cedera ringan.", author: "Coach Agus" },
     ],
+    createdAt: "2026-02-05T00:00:00Z", updatedAt: "2026-02-28T00:00:00Z"
   },
   {
-    id: "p7", globalId: "P-2026-0007", name: "Mahesa Putra", nik: "3471011402180007", dateOfBirth: "2018-02-14", ageCategory: "U8", position: "ST",
+    id: "p7", globalId: "P-2026-0007", name: "Mahesa Putra", nik: "3471011402180007", dateOfBirth: "2018-02-14", age: 8, ageCategory: "U9", position: "forward",
+    email: "mahesa@email.com", phone: "08189012345",
+    parent: { motherName: "Ratna Dewi", contactNumber: "08189012345", relationshipType: "Mother", email: "wawan.putra@email.com" },
     parentName: "Wawan Putra", motherName: "Ratna Dewi", parentPhone: "08189012345", parentEmail: "wawan.putra@email.com",
-    address: "Jl. Veteran No. 89, Yogyakarta", ssbId: "ssb1", status: "active",
+    address: "Jl. Veteran No. 89, Yogyakarta", ssbId: "ssb1", status: "active", verificationStatus: "unverified",
     documents: { photo: "/placeholder.svg" },
     developmentNotes: [
       { id: "dn9", date: "2026-03-21", type: "training", note: "Mulai mengenal formasi. Antusias tinggi.", author: "Coach Citra" },
     ],
+    createdAt: "2026-02-10T00:00:00Z", updatedAt: "2026-03-21T00:00:00Z"
   },
   {
-    id: "p8", globalId: "P-2026-0008", name: "Naufal Aziz", nik: "3471013006180008", dateOfBirth: "2018-06-30", ageCategory: "U8", position: "CM",
+    id: "p8", globalId: "P-2026-0008", name: "Naufal Aziz", nik: "3471013006180008", dateOfBirth: "2018-06-30", age: 7, ageCategory: "U9", position: "midfielder",
+    email: "naufal@email.com", phone: "08190123456",
+    parent: { motherName: "Anisa Putri", contactNumber: "08190123456", relationshipType: "Mother", email: "yusuf.aziz@email.com" },
     parentName: "Yusuf Aziz", motherName: "Anisa Putri", parentPhone: "08190123456", parentEmail: "yusuf.aziz@email.com",
-    address: "Jl. Malioboro No. 67, Yogyakarta", ssbId: "ssb1", status: "active",
+    address: "Jl. Malioboro No. 67, Yogyakarta", ssbId: "ssb1", status: "active", verificationStatus: "unverified",
     documents: { birthCertificate: "/placeholder.svg" },
     developmentNotes: [],
+    createdAt: "2026-02-15T00:00:00Z", updatedAt: "2026-02-15T00:00:00Z"
   },
 ];
 
