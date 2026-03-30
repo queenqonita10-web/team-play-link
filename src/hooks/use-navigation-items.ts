@@ -30,7 +30,7 @@ export function useNavigationItems(searchQuery: string = "") {
       const filteredItems = group.items.filter(item => {
         // 1. Role-based filtering
         let hasAccess = false;
-        if (user.role === "super_admin") {
+        if ((user.role as string) === "super_admin") {
           hasAccess = true;
         } else if (item.roles && item.roles.includes(user.role)) {
           hasAccess = true;
