@@ -33,7 +33,8 @@ describe("Comprehensive Age Category Validation", () => {
     ageCategory: ageCat as any,
     minAge: min,
     maxAge: max,
-    maxTeams: 16
+    maxTeams: 16,
+    registrationFee: 500000
   });
 
   it("should validate U8 correctly (age < 8)", () => {

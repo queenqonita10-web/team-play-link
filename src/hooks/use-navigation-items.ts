@@ -36,7 +36,7 @@ export function useNavigationItems(searchQuery: string = "") {
           hasAccess = true;
         } else {
           // Portal-wide default access
-          const isSuperAdmin = user.role === "super_admin";
+          const isSuperAdmin = (user.role as string) === "super_admin";
           
           switch (portalInfo.key) {
             case "ssb":
